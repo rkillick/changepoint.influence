@@ -1,6 +1,6 @@
 Package: changepoint.influence
 Type: Package
-Title: Package to calculate the influence of the data on a changepoint segmentation.
+Title: Package to calculate the influence of the data on a changepoint segmentation
 Version: 0.1
 Date: 2020-09-15
 Authors@R: c(person("Rebecca", "Killick", role=c("aut","cre"),email="r.killick@lancs.ac.uk"),
