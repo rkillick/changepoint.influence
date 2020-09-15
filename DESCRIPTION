@@ -1,0 +1,17 @@
+Package: changepoint.influence
+Type: Package
+Title: Package to calculate the influence of the data on a changepoint segmentation.
+Version: 0.1
+Date: 2019-10-13
+Authors@R: c(person("Rebecca", "Killick", role=c("aut","cre"),email="r.killick@lancs.ac.uk"),
+        person("Ines", "Wilms", role="aut"),
+	person("David", "Matteson", role="aut"))
+Maintainer: Rebecca Killick <r.killick@lancs.ac.uk>
+BugReports: https://github.com/rkillick/changepoint.influence/issues
+URL: https://github.com/rkillick/changepoint.influence/
+Depends: R(>= 3.2), methods, stats, ggfortify, reshape2, gridExtra
+Suggests: testthat, vdiffr
+Description: The package allows users to input their data, segmentation and function used for the segmentation (and additional arguments) and the package calculates the influence of the data on the changepoint locations.  This can be used with the native changepoint package functions or a users personal function to identify changes.  There are options for different types of graphics to assess the influence.
+License: GPL
+LazyData: true
+Packaged: 2019-10-13 15:55:29 UTC; killick
