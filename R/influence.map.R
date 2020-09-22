@@ -41,6 +41,7 @@ influence.map=function(original.cpts, influence, expected=NULL,hist.tcpt.delete=
     col.cpts[which(diff(original.cpts)==1)+1]="red"
     
     ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(Var1,Var2,fill=value),show.legend=TRUE)+
+      ggtitle(paste('Influence map using',method,"method"))+
       labs(x="Observation Number", y = "Outlier Position")+
       scale_fill_gradient2(low="blue",mid="white",high="red",midpoint=0,name="Change in segment index")+
       theme(legend.position="bottom")
