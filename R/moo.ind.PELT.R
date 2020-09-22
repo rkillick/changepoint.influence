@@ -1,12 +1,12 @@
-moo.ind.PELT=function(out.point,data,range=diff(range(data)),pos=TRUE,same=FALSE,sd=0.01,...){
+moo.ind.PELT=function(out.point,data,range,pos=TRUE,same=FALSE,sd=0.01,...){
   # function to generate a single moo dataset and apply the PELT algorithm to the data
   
   # out.point     The index of the point to make an outlier
   # data          The original data
   # range         Max-Min of data
-  # pos=TRUE      If true outlier is above the data, if false then below
-  # same=FALSE    If TRUE the original value doesn't matter the out.point is a new value, if true then range added to the original point
-  # sd=0.01       jitter to add to the outlier point
+  # pos.=TRUE      If true outlier is above the data, if false then below
+  # same.=FALSE    If TRUE the original value doesn't matter the out.point is a new value, if true then range added to the original point
+  # sd.=0.01       jitter to add to the outlier point
   # ...           arguments to be passed to the changepoint method
   
   n=length(data)
@@ -14,10 +14,10 @@ moo.ind.PELT=function(out.point,data,range=diff(range(data)),pos=TRUE,same=FALSE
   else if(any(out.point>n)){stop('out.point is larger than the length of the data')}
   
   # generate the data
-  data[out.point]=make.many.outlier(data[out.point],range=range,pos=pos,same=same,sd=sd)
+  data[out.point]=make.many.outlier(data[out.point],range.data=range,pos=pos,same=same,sd=sd)
 
   # apply the PELT approach
-  outlier.ans=cpt.meanvar(data,method='PELT',...)
+  outlier.ans=cpt.mean(data,method='PELT',...)
   
   # return the new cpt object
   return(outlier.ans)

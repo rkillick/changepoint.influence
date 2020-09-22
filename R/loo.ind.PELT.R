@@ -13,7 +13,7 @@ loo.ind.PELT=function(del.point,data,...){
   data=data[-del.point]
   
   # apply the PELT approach
-  del.ans=cpt.meanvar(data,method='PELT',...)
+  del.ans=cpt.mean(data,method='PELT',...)
   
   # retreieve the relevant output
   # class vector
