@@ -1,14 +1,14 @@
-stability.overview=function(data, original.cpts, influence, expected=NULL,cpt.lty="dashed",cpt.lwd=2,...){
-  # plots the original changepoints with colours indicating whether they have moved within the modify/delete methods
+location.stability=function(original.cpts, influence, expected=NULL,hist.tcpt.delete=FALSE,cpt.lty="dashed",cpt.lwd=2,...){
+  # histograms the changepoint locations identified
   
-  # data              Vector of original data
   # original.cpts     The cpts in the original data
   # influence         The influenced cpts and parameters (output from influence.generate.** functions)
   # expected          The expected segmentation based on original.cpts (if NULL is calculated using *.expected.mean functions)
   # cpt.lty           Line type for the changepoint lines
   # cpt.lwd           Line width for the changepoint lines
   
-  n=length(data)
+  
+  n=nrow(influence[[1]]$class)
   ncpts=length(original.cpts)
   
   original.class=rep(1:(ncpts+1),times=diff(c(0,original.cpts,n)))
@@ -25,24 +25,42 @@ stability.overview=function(data, original.cpts, influence, expected=NULL,cpt.lt
   
   for(i in 1:length(influence)){
     method="outlier"
+    max=n
     if(names[i]=="del"){
       method="deletion"
+      max=n-1
     }
-    plot(data,type='l',ylab='',xlab='Time',main=paste('Stability dashboard using',method,"method"),...) # plot the original time series
-
-    resid=influence[[i]]$class-expected[[i]]
-    ########### note the partial matching used here (class.del or class.out)
+    
+    #####################################
+    #####################################
+    # The below doesn't work for deletion currently due to the NAs
+    #####################################
+    #####################################
+    cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))
+    tcpts=table(cpts)
     
     col.cpts=rep("dark green",length(original.cpts))
     for(j in 1:ncpts){
-      if(any(resid[,original.cpts[j]]!=0)){
+      if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
         col.cpts[j]="orange2"
       }
     }
     col.cpts[which(diff(original.cpts)==1)]="red"
     col.cpts[which(diff(original.cpts)==1)+1]="red"
     
-    abline(v=original.cpts,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
-    # do we want a legend to specify the colours or just leave it to the documentation?
+    hist.col=rep(1,n)
+    hist.col[original.cpts]=col.cpts
+    if(hist.tcpt.delete==TRUE){
+      hist.col[original.cpts]=0
+      for(j in 1:ncpts){
+        tmp=which(cpts==original.cpts[j])
+        if(length(tmp)!=0){
+          cpts=cpts[-tmp]
+        }
+      }
+    }
+    hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main=paste('Location Stability using',method,"method"))
+    segments(x0=original.cpts,y0=-100,y1=0,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
+    # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
   }
 }
