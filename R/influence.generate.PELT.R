@@ -59,4 +59,5 @@ influence.generate.PELT=function(cptobject,method=c("delete","outlier"),pos=pos,
   
   # return
   return(ans)
+  # note that rows are the different manipulations and the columns are the time index (the way it should be!)
 }
