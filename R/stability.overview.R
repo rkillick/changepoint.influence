@@ -1,9 +1,10 @@
-stability.overview=function(data, original.cpts, influence, expected=NULL,...){
+stability.overview=function(data, original.cpts, influence, expected=NULL,cpt.lty="dashed",cpt.lwd=2,...){
   # plots the original changepoints with colours indicating whether they have moved within the modify/delete methods
   
   # data              Vector of original data
   # original.cpts     The cpts in the original data
   # influence         The influenced cpts and parameters (output from influence.generate.** functions)
+  # expected          The expected segmentation based on original.cpts (if NULL is calculated using *.expected.mean functions)
   
   n=length(data)
   ncpts=length(original.cpts)
@@ -22,13 +23,10 @@ stability.overview=function(data, original.cpts, influence, expected=NULL,...){
   
   for(i in 1:length(influence)){
     method="outlier"
-    max=n
     if(names[i]=="del"){
       method="deletion"
-      max=n-1
     }
     plot(data,type='l',ylab='',xlab='Time',main=paste('Stability dashboard using',method,"method"),...) # plot the original time series
-
 
     resid=influence[[i]]$class-expected[[i]]
     ########### note the partial matching used here (class.del or class.out)
@@ -42,7 +40,7 @@ stability.overview=function(data, original.cpts, influence, expected=NULL,...){
     col.cpts[which(diff(original.cpts)==1)]="red"
     col.cpts[which(diff(original.cpts)==1)+1]="red"
     
-    abline(v=original.cpts,col=col.cpts,lty=2,lwd=2)
+    abline(v=original.cpts,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
     # do we want a legend to specify the colours or just leave it to the documentation?
   }
 }
