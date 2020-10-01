@@ -1,4 +1,4 @@
-location.stability=function(original.cpts, influence, expected=NULL,hist.tcpt.delete=FALSE,cpt.lwd=2,...){
+location.stability=function(original.cpts, influence, hist.tcpt.delete=FALSE,cpt.lwd=2,...){
   # histograms the changepoint locations identified
   
   # original.cpts     The cpts in the original data
@@ -14,37 +14,38 @@ location.stability=function(original.cpts, influence, expected=NULL,hist.tcpt.de
   original.class=rep(1:(ncpts+1),times=diff(c(0,original.cpts,n)))
   names=names(influence)
   
-  # if the expected isn't given it needs calculating
-  if(is.null(expected)){expected=list()}
-  
-  for(i in 1:length(influence)){
-    if(eval(parse(text=paste("is.null(expected$",names[i],")",sep="")))){
-      eval(parse(text=paste("expected$",names[i],"=",names[i],".expected.mean(original.class)",sep=""))) # calculated the expected
-    }
-  }
-  
   for(i in 1:length(influence)){
     method="outlier"
+    max=198
     if(names[i]=="del"){
       method="deletion"
+      max=199
       
       # Dealing with the NAs temporarily (not returned to user) so we can plot nicely
       index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
-      influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-1] # replace NA with previous index
+      influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
       influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
-      
-      # repeat for expected
-      index.na=which(is.na(expected$del))[-1] # -1 as we will deal with the first instance separately
-      expected$del[index.na]=expected$del[index.na-1] # replace NA with previous index
-      expected$del[1,1]=1 # replace the first NA with 1
     }
     
     cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))
+    cpts=sort(cpts)
+    
+    if(names[i]=="del"){
+      # create an index of cpts to delete as they are just a function of the deletion process
+      del.correct.index=apply(matrix(original.cpts,ncol=1),1,FUN=function(x){return(which(cpts==(x+1))[1])})
+      cpts=cpts[-del.correct.index]
+    }
+    else{
+      # create an index of cpts to delete as they are just a function of the outlier process
+      del.outlier.index=apply(matrix(1:(n-1),ncol=1),1,FUN=function(x){return(which(cpts==x)[1:2])})
+      cpts=cpts[-del.outlier.index]
+    }
+    
     tcpts=table(cpts)
     
     col.cpts=rep("dark green",length(original.cpts))
     for(j in 1:ncpts){
-      if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=n){
+      if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
         col.cpts[j]="orange2"
       }
     }
@@ -66,6 +67,6 @@ location.stability=function(original.cpts, influence, expected=NULL,hist.tcpt.de
     segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts,lwd=cpt.lwd) # do -0.5 so in the middle of the bar
     # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
     
-    abline(h=n, col='grey')
+    abline(h=max, col='grey')
   }
 }
