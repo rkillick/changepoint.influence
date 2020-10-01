@@ -79,7 +79,8 @@ influence.map=function(original.cpts, influence, expected=NULL,data=NULL,include
       grid.arrange(grobs = list(ggcpt, ggimage), layout_matrix=lay, top = textGrob(paste('Influence map using',method,"method"),gp=gpar(fontsize=14)))
     }
     else{
-      ggimage=ggimage+ggtitle(paste('Influence map using',method,"method"))
+      ggimage=ggimage+ggtitle(paste('Influence map using',method,"method"))+
+        theme(plot.title = element_text(hjust = 0.5))
       print(ggimage)
     }
   }
