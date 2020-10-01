@@ -1,3 +1,8 @@
 exportPattern("^[[:alpha:]]+")
 
 importFrom("grDevices","colorRampPalette")
+importFrom("ggplot2","ggplot","geom_raster","ggtitle","scale_fill_gradient2","theme","geom_abline","geom_point","aes",
+           "geom_vline","ggplotGrob")
+importFrom("reshape","melt")
+importFrom("grid","unit.pmax","textGrob")
+importFrom("gridExtra","grid.arrange")

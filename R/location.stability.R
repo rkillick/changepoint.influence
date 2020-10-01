@@ -1,4 +1,4 @@
-location.stability=function(original.cpts, influence, expected=NULL,hist.tcpt.delete=FALSE,cpt.lty="dashed",cpt.lwd=2,...){
+location.stability=function(original.cpts, influence, expected=NULL,hist.tcpt.delete=FALSE,cpt.lwd=2,...){
   # histograms the changepoint locations identified
   
   # original.cpts     The cpts in the original data
@@ -10,7 +10,7 @@ location.stability=function(original.cpts, influence, expected=NULL,hist.tcpt.de
   
   n=nrow(influence[[1]]$class)
   ncpts=length(original.cpts)
-  
+
   original.class=rep(1:(ncpts+1),times=diff(c(0,original.cpts,n)))
   names=names(influence)
   
@@ -25,23 +25,26 @@ location.stability=function(original.cpts, influence, expected=NULL,hist.tcpt.de
   
   for(i in 1:length(influence)){
     method="outlier"
-    max=n
     if(names[i]=="del"){
       method="deletion"
-      max=n-1
+      
+      # Dealing with the NAs temporarily (not returned to user) so we can plot nicely
+      index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
+      influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-1] # replace NA with previous index
+      influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
+      
+      # repeat for expected
+      index.na=which(is.na(expected$del))[-1] # -1 as we will deal with the first instance separately
+      expected$del[index.na]=expected$del[index.na-1] # replace NA with previous index
+      expected$del[1,1]=1 # replace the first NA with 1
     }
     
-    #####################################
-    #####################################
-    # The below doesn't work for deletion currently due to the NAs
-    #####################################
-    #####################################
     cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))
     tcpts=table(cpts)
     
     col.cpts=rep("dark green",length(original.cpts))
     for(j in 1:ncpts){
-      if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
+      if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=n){
         col.cpts[j]="orange2"
       }
     }
@@ -60,7 +63,9 @@ location.stability=function(original.cpts, influence, expected=NULL,hist.tcpt.de
       }
     }
     hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main=paste('Location Stability using',method,"method"))
-    segments(x0=original.cpts,y0=-100,y1=0,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
+    segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts,lwd=cpt.lwd) # do -0.5 so in the middle of the bar
     # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
+    
+    abline(h=n, col='grey')
   }
 }
