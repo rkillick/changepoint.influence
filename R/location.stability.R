@@ -1,4 +1,4 @@
-location.stability=function(original.cpts, influence, hist.tcpt.delete=FALSE,cpt.lwd=2,...){
+location.stability=function(original.cpts, influence, data=NULL,include.data=FALSE,hist.tcpt.delete=FALSE,cpt.lty="dashed",cpt.lwd=2,...){
   # histograms the changepoint locations identified
   
   # original.cpts     The cpts in the original data
@@ -51,6 +51,15 @@ location.stability=function(original.cpts, influence, hist.tcpt.delete=FALSE,cpt
     }
     col.cpts[which(diff(original.cpts)==1)]="red"
     col.cpts[which(diff(original.cpts)==1)+1]="red"
+    
+    if(include.data==TRUE){
+      if(is.null(data)){
+        stop("data argument must be supplied if include.data=TRUE.")
+      }
+      par(mfrow=c(2,1))
+      plot(data,type='l',ylab='',xlab='Time',main='',...) # plot the original time series
+      abline(v=original.cpts,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
+    }
     
     hist.col=rep(1,n)
     hist.col[original.cpts]=col.cpts

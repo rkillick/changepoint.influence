@@ -4,6 +4,8 @@ influence.map=function(original.cpts, influence, expected=NULL,data=NULL,include
   # original.cpts     The cpts in the original data (not including 0 and n)
   # influence         The influenced cpts and parameters (output from influence.generate.** functions)
   # expected          The expected segmentation based on original.cpts (if NULL is calculated using *.expected.mean functions)
+  # data              The original time series
+  # include.data      Logical, whether to include a plot of the original time series with cpts
   # cpt.lty           Line type for the changepoint lines
   # cpt.lwd           Line width for the changepoint lines
   
