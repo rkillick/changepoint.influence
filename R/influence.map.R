@@ -43,12 +43,12 @@ influence.map=function(original.cpts, influence, expected=NULL,data=NULL,include
       
       # Dealing with the NAs temporarily (not returned to user) so we can plot nicely
       index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
-      influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-1] # replace NA with previous index
+      influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
       influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
       
       # repeat for expected
       index.na=which(is.na(expected$del))[-1] # -1 as we will deal with the first instance separately
-      expected$del[index.na]=expected$del[index.na-1] # replace NA with previous index
+      expected$del[index.na]=expected$del[index.na-n] # replace NA with previous index
       expected$del[1,1]=1 # replace the first NA with 1
     }
     

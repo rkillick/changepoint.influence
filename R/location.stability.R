@@ -56,9 +56,11 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
       if(is.null(data)){
         stop("data argument must be supplied if include.data=TRUE.")
       }
+      op <- par(no.readonly = TRUE) # read current parameters
       par(mfrow=c(2,1))
       plot(data,type='l',ylab='',xlab='Time',main='',...) # plot the original time series
       abline(v=original.cpts,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
+      par(op) # reset previous parameters
     }
     
     hist.col=rep(1,n)
