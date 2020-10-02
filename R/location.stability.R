@@ -52,17 +52,6 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
     col.cpts[which(diff(original.cpts)==1)]="red"
     col.cpts[which(diff(original.cpts)==1)+1]="red"
     
-    if(include.data==TRUE){
-      if(is.null(data)){
-        stop("data argument must be supplied if include.data=TRUE.")
-      }
-      op <- par(no.readonly = TRUE) # read current parameters
-      par(mfrow=c(2,1))
-      plot(data,type='l',ylab='',xlab='Time',main='',...) # plot the original time series
-      abline(v=original.cpts,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
-      par(op) # reset previous parameters
-    }
-    
     hist.col=rep(1,n)
     hist.col[original.cpts]=col.cpts
     if(hist.tcpt.delete==TRUE){
@@ -74,10 +63,30 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
         }
       }
     }
-    hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main=paste('Location Stability using',method,"method"))
-    segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts,lwd=cpt.lwd) # do -0.5 so in the middle of the bar
-    # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
+
+    if(include.data==TRUE){
+      if(is.null(data)){
+        stop("data argument must be supplied if include.data=TRUE.")
+      }
+      op <- par(no.readonly = TRUE) # read current parameters
+      par(mfrow=c(2,1))
+      plot(data,type='l',ylab='',xlab='Time',main=paste('Location Stability using',method,"method"),...) # plot the original time series
+      abline(v=original.cpts,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
+
+      hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n))
+      segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts,lwd=cpt.lwd) # do -0.5 so in the middle of the bar
+      # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
+      
+      abline(h=max, col='grey')
+      par(op) # reset previous parameters
+    }
+    else{ # same as above but title included on Histogram
+      hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main=paste('Location Stability using',method,"method"))
+      segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts,lwd=cpt.lwd) # do -0.5 so in the middle of the bar
+      # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
+      
+      abline(h=max, col='grey')
+    }
     
-    abline(h=max, col='grey')
   }
 }
