@@ -16,10 +16,10 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
   
   for(i in 1:length(influence)){
     method="outlier"
-    max=198
+    max=n-2
     if(names[i]=="del"){
       method="deletion"
-      max=199
+      max=n-1
       
       # Dealing with the NAs temporarily (not returned to user) so we can plot nicely
       index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
