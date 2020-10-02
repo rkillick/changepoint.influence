@@ -38,8 +38,10 @@ influence.map=function(original.cpts, influence, expected=NULL,data=NULL,include
   
   for(i in 1:length(influence)){
     method="outlier"
+    max=n-2
     if(names[i]=="del"){
       method="deletion"
+      max=n-1
       
       # Dealing with the NAs temporarily (not returned to user) so we can plot nicely
       index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
