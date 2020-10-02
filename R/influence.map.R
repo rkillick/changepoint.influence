@@ -55,9 +55,25 @@ influence.map=function(original.cpts, influence, expected=NULL,data=NULL,include
     resid=influence[[i]]$class-expected[[i]]
     ########### note the partial matching used here (class.del or class.out)
 
+    cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))
+    cpts=sort(cpts)
+    
+    if(names[i]=="del"){
+      # create an index of cpts to delete as they are just a function of the deletion process
+      del.correct.index=apply(matrix(original.cpts,ncol=1),1,FUN=function(x){return(which(cpts==(x+1))[1])})
+      cpts=cpts[-del.correct.index]
+    }
+    else{
+      # create an index of cpts to delete as they are just a function of the outlier process
+      del.outlier.index=apply(matrix(1:(n-1),ncol=1),1,FUN=function(x){return(which(cpts==x)[1:2])})
+      cpts=cpts[-del.outlier.index]
+    }
+    
+    tcpts=table(cpts)
+    
     col.cpts=rep("dark green",length(original.cpts))
     for(j in 1:ncpts){
-      if(any(resid[,original.cpts[j]]!=0)){
+      if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
         col.cpts[j]="orange2"
       }
     }
