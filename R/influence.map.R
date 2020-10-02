@@ -83,7 +83,7 @@ influence.map=function(original.cpts, influence, expected=NULL,data=NULL,include
     col.cpts[which(diff(original.cpts)==1)+1]="red"
     
     ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(X1,X2,fill=value),show.legend=TRUE)+
-      labs(x="Observation Index\n\nFewer Cpts                        More Cpts", y = "Outlier Position")+
+      labs(x="Observation Index\n\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
       scale_fill_gradient2(low="blue",mid="white",high="red",midpoint=0, name="")+
       theme(legend.position="bottom")
     ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts,alpha=0.8)
