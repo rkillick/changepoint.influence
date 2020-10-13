@@ -1,4 +1,4 @@
-influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.data=FALSE,cpt.lty="dashed",cpt.lwd=2,...){
+influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.data=FALSE,cpt.lty="dashed",cpt.lwd=2,ylab='',...){
   # images the residuals of fit-expected for class
   
   # original.cpts     The cpts in the original data (not including 0 and n)
@@ -97,7 +97,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts,alpha=0.8)
     
     if(include.data==TRUE){
-      ggcpt=ggplot(data=data)+geom_line(aes(x=index,y=data))+ labs(x="Index", y = "")+
+      ggcpt=ggplot(data=data)+geom_line(aes(x=index,y=data))+ labs(x="Index", y = ylab)+
               geom_vline(xintercept = original.cpts, colour = col.cpts, linetype = cpt.lty) # add cpts
       ggcpt=ggplotGrob(ggcpt)
       

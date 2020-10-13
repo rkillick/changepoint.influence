@@ -1,4 +1,4 @@
-parameter.stability=function(influence,original.mean=NULL,digits=6){
+parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',...){
   # Function to plot the parameter stability across the influence modification
   # Note that this function
  
@@ -28,7 +28,7 @@ parameter.stability=function(influence,original.mean=NULL,digits=6){
     counts=rbindlist(counts)
     
     plot(counts$index,counts$values,pch=20,col=hsv(v=0,alpha=0.5*(counts$counts/n+1)),bg=hsv(v=0,alpha=0.5*(counts$counts/n+1)),
-         main=paste('Parameter Stability using',method,"method"),xlab='Time',ylab='')
+         main=paste('Parameter Stability using',method,"method"),xlab='Time',ylab=ylab,...)
     if(!is.null(original.mean)){
       if(length(original.mean)!=n){
         stop(paste('Length of original.mean must be',n))

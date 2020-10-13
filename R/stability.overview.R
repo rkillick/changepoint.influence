@@ -1,4 +1,4 @@
-stability.overview=function(data, original.cpts, influence, cpt.lty="dashed",cpt.lwd=2,...){
+stability.overview=function(data, original.cpts, influence, cpt.lty="dashed",cpt.lwd=2,ylab='',...){
   # plots the original changepoints with colours indicating whether they have moved within the modify/delete methods
   
   # data              Vector of original data
@@ -24,7 +24,7 @@ stability.overview=function(data, original.cpts, influence, cpt.lty="dashed",cpt
       influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
     }
 
-    plot(data,type='l',ylab='',xlab='Time',main=paste('Stability dashboard using',method,"method"),...) # plot the original time series
+    plot(data,type='l',ylab=ylab,xlab='Time',main=paste('Stability dashboard using',method,"method"),...) # plot the original time series
 
 
     cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))

@@ -1,4 +1,4 @@
-location.stability=function(original.cpts, influence, data=NULL,include.data=FALSE,hist.tcpt.delete=FALSE,cpt.lty="dashed",cpt.lwd=2,...){
+location.stability=function(original.cpts, influence, data=NULL,include.data=FALSE,hist.tcpt.delete=FALSE,cpt.lty="dashed",cpt.lwd=2,ylab=ylab,...){
   # histograms the changepoint locations identified
   
   # original.cpts     The cpts in the original data
@@ -70,7 +70,7 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
       }
       op <- par(no.readonly = TRUE) # read current parameters
       par(mfrow=c(2,1))
-      plot(data,type='l',ylab='',xlab='Time',main=paste('Location Stability using',method,"method"),...) # plot the original time series
+      plot(data,type='l',ylab=ylab,xlab='Time',main=paste('Location Stability using',method,"method"),...) # plot the original time series
       abline(v=original.cpts,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
 
       hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n))
@@ -81,7 +81,7 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
       par(op) # reset previous parameters
     }
     else{ # same as above but title included on Histogram
-      hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main=paste('Location Stability using',method,"method"))
+      hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main=paste('Location Stability using',method,"method"),...)
       segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts,lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
       
