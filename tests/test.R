@@ -18,3 +18,5 @@ location.stability(cpts(xcpt),x.inf,include.data=T,data=x)
 
 influence.map(cpts(xcpt),x.inf)
 influence.map(cpts(xcpt),x.inf,include.data=T,data=x)
+
+parameter.stability(x.inf,original.mean=rep(param.est(xcpt)$mean,times=diff(c(0,xcpt@cpts))))

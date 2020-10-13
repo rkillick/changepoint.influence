@@ -1,4 +1,4 @@
-influence.map=function(original.cpts, influence, expected=NULL,data=NULL,include.data=FALSE,cpt.lty="dashed",cpt.lwd=2,...){
+influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.data=FALSE,cpt.lty="dashed",cpt.lwd=2,...){
   # images the residuals of fit-expected for class
   
   # original.cpts     The cpts in the original data (not including 0 and n)
@@ -15,12 +15,16 @@ influence.map=function(original.cpts, influence, expected=NULL,data=NULL,include
   original.class=rep(1:(ncpts+1),times=diff(c(0,original.cpts,n)))
   names=names(influence)
   
-  # if the expected isn't given it needs calculating
-  if(is.null(expected)){expected=list()}
+  return=0
+  # if the resid isn't given it needs calculating
+  if(is.null(resid)){
+    return=1
+    expected=list()
   
-  for(i in 1:length(influence)){
-    if(eval(parse(text=paste("is.null(expected$",names[i],")",sep="")))){
-      eval(parse(text=paste("expected$",names[i],"=",names[i],".expected.mean(original.class)",sep=""))) # calculated the expected
+    for(i in 1:length(influence)){
+      if(eval(parse(text=paste("is.null(expected$",names[i],")",sep="")))){
+        eval(parse(text=paste("expected$",names[i],"=",names[i],".expected.mean(original.class)",sep=""))) # calculated the expected
+      }
     }
   }
   
@@ -43,20 +47,24 @@ influence.map=function(original.cpts, influence, expected=NULL,data=NULL,include
       method="deletion"
       max=n-1
       
-      # Dealing with the NAs temporarily (not returned to user) so we can plot nicely
-      index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
-      influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
-      influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
+      if(is.null(resid)){
+        # Dealing with the NAs temporarily (not returned to user) so we can plot nicely
+        index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
+        influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
+        influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
       
-      # repeat for expected
-      index.na=which(is.na(expected$del))[-1] # -1 as we will deal with the first instance separately
-      expected$del[index.na]=expected$del[index.na-n] # replace NA with previous index
-      expected$del[1,1]=1 # replace the first NA with 1
+        # repeat for expected
+        index.na=which(is.na(expected$del))[-1] # -1 as we will deal with the first instance separately
+        expected$del[index.na]=expected$del[index.na-n] # replace NA with previous index
+        expected$del[1,1]=1 # replace the first NA with 1
+      }
     }
     
-    resid=influence[[i]]$class-expected[[i]]
+    if(is.null(resid)){
+      resid=influence[[i]]$class-expected[[i]]
     ########### note the partial matching used here (class.del or class.out)
-
+    }
+    
     cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))
     cpts=sort(cpts)
     
@@ -104,5 +112,7 @@ influence.map=function(original.cpts, influence, expected=NULL,data=NULL,include
       print(ggimage)
     }
   }
-
+  if(return){
+    return(resid)
+  }
 }

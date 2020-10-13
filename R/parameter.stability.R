@@ -25,9 +25,9 @@ parameter.stability=function(influence,original.mean=NULL,digits=6){
       counts.df=data.frame(index=rep(x,length(counts$values)),values=counts$values,counts=counts$lengths)
       return(counts.df)
     },influence=influence,digits=digits,i=i)
-    counts=rbindlist(counts.list)
+    counts=rbindlist(counts)
     
-    plot(counts$index,counts$values,pch=19,col=hsv(v=0,alpha=0.5*(counts$counts/n+1)),bg=hsv(v=0,alpha=0.5*(counts$counts/n+1)),
+    plot(counts$index,counts$values,pch=20,col=hsv(v=0,alpha=0.5*(counts$counts/n+1)),bg=hsv(v=0,alpha=0.5*(counts$counts/n+1)),
          main=paste('Parameter Stability using',method,"method"),xlab='Time',ylab='')
     if(!is.null(original.mean)){
       if(length(original.mean)!=n){
