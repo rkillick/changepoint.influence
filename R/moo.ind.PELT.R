@@ -1,12 +1,12 @@
 moo.ind.PELT=function(out.point,data,range,pos=TRUE,same=FALSE,sd=0.01,...){
   # function to generate a single moo dataset and apply the PELT algorithm to the data
   
-  # out.point     The index of the point to make an outlier
+  # out.point     The index of the point to modify
   # data          The original data
   # range         Max-Min of data
-  # pos.=TRUE      If true outlier is above the data, if false then below
+  # pos.=TRUE      If true modification is above the data, if false then below
   # same.=FALSE    If TRUE the original value doesn't matter the out.point is a new value, if true then range added to the original point
-  # sd.=0.01       jitter to add to the outlier point
+  # sd.=0.01       jitter to add to the modified point
   # ...           arguments to be passed to the changepoint method
   
   n=length(data)

@@ -41,10 +41,10 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
   }
   
   for(i in 1:length(influence)){
-    method="outlier"
+    method="modify"
     max=n-2
     if(names[i]=="del"){
-      method="deletion"
+      method="delete"
       max=n-1
       
       if(is.null(resid)){
@@ -74,7 +74,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
       cpts=cpts[-del.correct.index]
     }
     else{
-      # create an index of cpts to delete as they are just a function of the outlier process
+      # create an index of cpts to delete as they are just a function of the modify process
       del.outlier.index=apply(matrix(1:(n-1),ncol=1),1,FUN=function(x){return(which(cpts==x)[1:2])})
       cpts=cpts[-del.outlier.index]
     }

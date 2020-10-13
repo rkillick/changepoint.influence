@@ -4,9 +4,9 @@ out.expected.mean=function(original.class){
   # original.class    The class of the original segmentation
 
   one.time.expected=function(i,original.class,cpt,cpt.affected,orig.outlier){
-    # function to calculate the expected class structure of a single timepoint across outlier positions
+    # function to calculate the expected class structure of a single timepoint across modify positions
     
-    expected=rep(original.class[i],length(original.class)) # under no outliers
+    expected=rep(original.class[i],length(original.class)) # under no modifications
     if(i>1){
       if(i==2){
         expected[1:2]=expected[1:2]+1
