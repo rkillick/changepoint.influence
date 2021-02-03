@@ -10,6 +10,8 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
   # cpt.lwd           Line width for the changepoint lines
   # ggops             Intended for additional ggplot2 options for influence map (see examples)
   
+  col.cpts=list()
+  
   n=nrow(influence[[1]]$class)
   ncpts=length(original.cpts)
   
@@ -82,24 +84,25 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     
     tcpts=table(cpts)
     
-    col.cpts=rep("dark green",length(original.cpts))
+    col.cpts[[i]]=rep("dark green",length(original.cpts))
     for(j in 1:ncpts){
       if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
-        col.cpts[j]="orange2"
+        col.cpts[[i]][j]="orange2"
       }
     }
-    col.cpts[which(diff(original.cpts)==1)]="red"
-    col.cpts[which(diff(original.cpts)==1)+1]="red"
+    col.cpts[[i]][which(diff(original.cpts)==1)]="red"
+    col.cpts[[i]][which(diff(original.cpts)==1)+1]="red"
+    names(col.cpts)[i]=names[i]
     
     ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(X1,X2,fill=value),show.legend=TRUE)+
       labs(x="Observation Index\n\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
       scale_fill_gradient2(low="blue",mid="white",high="red",midpoint=0, name="")+
       theme(legend.position="bottom")
-    ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts,alpha=0.8)
+    ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts[[i]],alpha=0.8)
     
     if(include.data==TRUE){
       ggcpt=ggplot(data=data)+geom_line(aes(x=index,y=data))+ labs(x="Index", y = ylab)+
-              geom_vline(xintercept = original.cpts, colour = col.cpts, linetype = cpt.lty) # add cpts
+              geom_vline(xintercept = original.cpts, colour = col.cpts[[i]], linetype = cpt.lty) # add cpts
       ggcpt=ggplotGrob(ggcpt)
       
       ggimage=ggimage+ggops # add user options at the end so can override our defaults
@@ -117,6 +120,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     }
   }
   if(return){
-    return(resid)
+    return(list(resid=resid,col.cpts=col.cpts))
   }
+  return(col.cpts)
 }

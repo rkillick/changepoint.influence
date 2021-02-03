@@ -3,10 +3,15 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
   
   # original.cpts     The cpts in the original data
   # influence         The influenced cpts and parameters (output from influence.generate.** functions)
-  # expected          The expected segmentation based on original.cpts (if NULL is calculated using *.expected.mean functions)
+  # data              Include if you want the data plotted
+  # include.data      True if you want to plot the data too
+  # hist.tcpt.delete  If true plots the histogram with the true changepoints deleted so you can see the moved changes more easily
   # cpt.lty           Line type for the changepoint lines
   # cpt.lwd           Line width for the changepoint lines
-  
+  # ylab              Label for the y-axis
+  # ...               Additional graphical parameters
+
+  col.cpts=list()
   
   n=nrow(influence[[1]]$class)
   ncpts=length(original.cpts)
@@ -43,17 +48,18 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
     
     tcpts=table(cpts)
     
-    col.cpts=rep("dark green",length(original.cpts))
+    col.cpts[[i]]=rep("dark green",length(original.cpts))
     for(j in 1:ncpts){
       if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
-        col.cpts[j]="orange2"
+        col.cpts[[i]][j]="orange2"
       }
     }
-    col.cpts[which(diff(original.cpts)==1)]="red"
-    col.cpts[which(diff(original.cpts)==1)+1]="red"
+    col.cpts[[i]][which(diff(original.cpts)==1)]="red"
+    col.cpts[[i]][which(diff(original.cpts)==1)+1]="red"
+    names(col.cpts)[i]=names[i]
     
     hist.col=rep(1,n)
-    hist.col[original.cpts]=col.cpts
+    hist.col[original.cpts]=col.cpts[[i]]
     if(hist.tcpt.delete==TRUE){
       hist.col[original.cpts]=0
       for(j in 1:ncpts){
@@ -71,10 +77,10 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
       op <- par(no.readonly = TRUE) # read current parameters
       par(mfrow=c(2,1))
       plot(data,type='l',ylab=ylab,xlab='Time',main=paste('Location Stability using',method,"method"),...) # plot the original time series
-      abline(v=original.cpts,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
+      abline(v=original.cpts,col=col.cpts[[i]],lty=cpt.lty,lwd=cpt.lwd)
 
       hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n))
-      segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts,lwd=cpt.lwd) # do -0.5 so in the middle of the bar
+      segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
       
       abline(h=max, col='grey')
@@ -82,11 +88,12 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
     }
     else{ # same as above but title included on Histogram
       hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main=paste('Location Stability using',method,"method"),...)
-      segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts,lwd=cpt.lwd) # do -0.5 so in the middle of the bar
+      segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
       
       abline(h=max, col='grey')
     }
     
   }
+  return(col.cpts)
 }

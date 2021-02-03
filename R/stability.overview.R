@@ -6,6 +6,10 @@ stability.overview=function(data, original.cpts, influence, cpt.lty="dashed",cpt
   # influence         The influenced cpts and parameters (output from influence.generate.** functions)
   # cpt.lty           Line type for the changepoint lines
   # cpt.lwd           Line width for the changepoint lines
+  # ylab              Label for the y-axis
+  # ...               Other graphical parameters
+
+  col.cpts=list()
   
   n=length(data)
   ncpts=length(original.cpts)
@@ -43,16 +47,18 @@ stability.overview=function(data, original.cpts, influence, cpt.lty="dashed",cpt
     
     tcpts=table(cpts)
 
-    col.cpts=rep("dark green",length(original.cpts))
+    col.cpts[[i]]=rep("dark green",length(original.cpts))
     for(j in 1:ncpts){
       if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
-        col.cpts[j]="orange2"
+        col.cpts[[i]][j]="orange2"
       }
     }
-    col.cpts[which(diff(original.cpts)==1)]="red"
-    col.cpts[which(diff(original.cpts)==1)+1]="red"
+    col.cpts[[i]][which(diff(original.cpts)==1)]="red"
+    col.cpts[[i]][which(diff(original.cpts)==1)+1]="red"
+    names(col.cpts)[i]=names[i]
     
-    abline(v=original.cpts,col=col.cpts,lty=cpt.lty,lwd=cpt.lwd)
+    abline(v=original.cpts,col=col.cpts[[i]],lty=cpt.lty,lwd=cpt.lwd)
     # do we want a legend to specify the colours or just leave it to the documentation?
   }
+  return(col.cpts)
 }
