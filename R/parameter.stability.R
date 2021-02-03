@@ -10,10 +10,10 @@ parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',...){
   names=names(influence)
   
   for(i in 1:length(influence)){
-    method="deletion"
+    method="delete"
     max=n-1
     if(names[i]=="out"){
-      method="outlier"
+      method="modify"
       max=n
       # remove the known outlier points
       for(j in 1:n){

@@ -1,4 +1,4 @@
-influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.data=FALSE,cpt.lty="dashed",cpt.lwd=2,ylab='',...){
+influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.data=FALSE,cpt.lty="dashed",cpt.lwd=2,ylab='',ggops=NULL){
   # images the residuals of fit-expected for class
   
   # original.cpts     The cpts in the original data (not including 0 and n)
@@ -8,6 +8,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
   # include.data      Logical, whether to include a plot of the original time series with cpts
   # cpt.lty           Line type for the changepoint lines
   # cpt.lwd           Line width for the changepoint lines
+  # ggops             Intended for additional ggplot2 options for influence map (see examples)
   
   n=nrow(influence[[1]]$class)
   ncpts=length(original.cpts)
@@ -101,6 +102,8 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
               geom_vline(xintercept = original.cpts, colour = col.cpts, linetype = cpt.lty) # add cpts
       ggcpt=ggplotGrob(ggcpt)
       
+      ggimage=ggimage+ggops # add user options at the end so can override our defaults
+      
       maxWidth = grid::unit.pmax(ggimage$widths[2:5], ggcpt$widths[2:5])
       ggimage$widths[2:5] <- as.list(maxWidth)
       ggcpt$widths[2:5] <- as.list(maxWidth)
@@ -109,6 +112,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     else{
       ggimage=ggimage+ggtitle(paste('Influence map using',method,"method"))+
         theme(plot.title = element_text(hjust = 0.5))
+      ggimage=ggimage+ggops # add user options at the end so can override our defaults
       print(ggimage)
     }
   }
