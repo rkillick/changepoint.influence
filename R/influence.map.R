@@ -103,6 +103,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     if(include.data==TRUE){
       ggcpt=ggplot(data=data)+geom_line(aes(x=index,y=data))+ labs(x="Index", y = ylab)+
               geom_vline(xintercept = original.cpts, colour = col.cpts[[i]], linetype = cpt.lty) # add cpts
+      ggcpt=ggcpt+ggops # add user options at the end so can override our defaults
       ggcpt=ggplotGrob(ggcpt)
       
       ggimage=ggimage+ggops # add user options at the end so can override our defaults
@@ -110,7 +111,17 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
       maxWidth = grid::unit.pmax(ggimage$widths[2:5], ggcpt$widths[2:5])
       ggimage$widths[2:5] <- as.list(maxWidth)
       ggcpt$widths[2:5] <- as.list(maxWidth)
-      grid.arrange(grobs = list(ggcpt, ggimage), layout_matrix=lay, top = textGrob(paste('Influence map using',method,"method"),gp=gpar(fontsize=14)))
+      
+      gridtitleops=list()
+      class(gridtitleops)="gpar"
+      gridtitleops$fontsize=14
+      if(any(names(ggops)=="plot.title")){
+        gridtitleops$fontfamily=ggops$plot.title$family
+        gridtitleops$fontface=ggops$plot.title$face
+        gridtitleops$col=ggops$plot.title$colour
+        gridtitleops$fontsize=ggops$plot.title$size
+      }
+      grid.arrange(grobs = list(ggcpt, ggimage), layout_matrix=lay, top = textGrob(paste('Influence map using',method,"method"),gp=gridtitleops))
     }
     else{
       ggimage=ggimage+ggtitle(paste('Influence map using',method,"method"))+

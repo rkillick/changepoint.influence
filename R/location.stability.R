@@ -1,4 +1,4 @@
-location.stability=function(original.cpts, influence, data=NULL,include.data=FALSE,hist.tcpt.delete=FALSE,cpt.lty="dashed",cpt.lwd=2,ylab='',...){
+location.stability=function(original.cpts, influence, data=NULL,include.data=FALSE,hist.tcpt.delete=FALSE,cpt.lty="dashed",cpt.lwd=4,ylab='',...){
   # histograms the changepoint locations identified
   
   # original.cpts     The cpts in the original data
