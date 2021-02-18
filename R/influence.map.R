@@ -96,13 +96,14 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     
     ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(X1,X2,fill=value),show.legend=TRUE)+
       labs(x="Observation Index\n\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
-      scale_fill_gradient2(low="blue",mid="white",high="red",midpoint=0, name="")+
-      theme(legend.position="bottom")
+      scale_fill_gradient2(low="blue",mid="white",high="red",midpoint=0, name="")
     ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts[[i]],alpha=0.8)
+    ggimage=ggimage+theme_classic()+theme(legend.position="bottom")
     
     if(include.data==TRUE){
       ggcpt=ggplot(data=data)+geom_line(aes(x=index,y=data))+ labs(x="Index", y = ylab)+
               geom_vline(xintercept = original.cpts, colour = col.cpts[[i]], linetype = cpt.lty) # add cpts
+      ggcpt=ggcpt+theme_classic()
       ggcpt=ggcpt+ggops # add user options at the end so can override our defaults
       ggcpt=ggplotGrob(ggcpt)
       
