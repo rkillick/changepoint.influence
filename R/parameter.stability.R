@@ -1,4 +1,4 @@
-parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',...){
+parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',xlab='Index',...){
   # Function to plot the parameter stability across the influence modification
   # Note that this function
  
@@ -10,10 +10,10 @@ parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',...){
   names=names(influence)
   
   for(i in 1:length(influence)){
-    method="delete"
+    method="Deletion"
     max=n-1
     if(names[i]=="out"){
-      method="modify"
+      method="Outlier"
       max=n
       # remove the known outlier points
       for(j in 1:n){
@@ -28,7 +28,7 @@ parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',...){
     counts=rbindlist(counts)
     
     plot(counts$index,counts$values,pch=20,col=hsv(v=0,alpha=0.3*(counts$counts/n+1)),lwd=0,#bg=hsv(v=0,alpha=0.5*(counts$counts/n+1)),
-         main=paste('Parameter Stability using',method,"method"),xlab='Time',ylab=ylab,...)
+         main='Parameter Stability',sub=paste(method,"method"),xlab=xlab,ylab=ylab,...)
     if(!is.null(original.mean)){
       if(length(original.mean)!=n){
         stop(paste('Length of original.mean must be',n))

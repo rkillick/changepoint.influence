@@ -1,4 +1,4 @@
-stability.overview=function(data, original.cpts, influence, cpt.lty="dashed",cpt.lwd=2,ylab='',...){
+stability.overview=function(data, original.cpts, influence, cpt.lty="dashed",cpt.lwd=2,ylab='Proportion of times identified',xlab='Index',...){
   # plots the original changepoints with colours indicating whether they have moved within the modify/delete methods
   
   # data              Vector of original data
@@ -18,17 +18,17 @@ stability.overview=function(data, original.cpts, influence, cpt.lty="dashed",cpt
   names=names(influence)
   
   for(i in 1:length(influence)){
-    method="modify"
+    method="Outlier"
     max=n-2
     if(names[i]=="del"){
-      method="delete"
+      method="Deletion"
       max=n-1
       index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
       influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
       influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
     }
 
-    plot(data,type='l',ylab=ylab,xlab='Time',main=paste('Stability dashboard using',method,"method"),...) # plot the original time series
+    plot(data,type='l',ylab=ylab,xlab=xlab,main='Stability dashboard',sub=paste(method,"method"),...) # plot the original time series
 
 
     cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))

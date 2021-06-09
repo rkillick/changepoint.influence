@@ -44,10 +44,10 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
   }
   
   for(i in 1:length(influence)){
-    method="modify"
+    method="Outlier"
     max=n-2
     if(names[i]=="del"){
-      method="delete"
+      method="Deletion"
       max=n-1
       
       if(is.null(resid)){
@@ -95,7 +95,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     names(col.cpts)[i]=names[i]
     
     ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(X1,X2,fill=value),show.legend=TRUE)+
-      labs(x="Observation Index\n\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
+      labs(x="Index\n\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
       scale_fill_gradient2(low="blue",mid="white",high="red",midpoint=0, name="")
     ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts[[i]],alpha=0.8)
     ggimage=ggimage+theme_classic()+theme(legend.position="bottom")
@@ -125,7 +125,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
       grid.arrange(grobs = list(ggcpt, ggimage), layout_matrix=lay, top = textGrob(paste('Influence map using',method,"method"),gp=gridtitleops))
     }
     else{
-      ggimage=ggimage+ggtitle(paste('Influence map using',method,"method"))+
+      ggimage=ggimage+ggtitle(label='Influence map', subtitle=paste(method,"method"))+
         theme(plot.title = element_text(hjust = 0.5))
       ggimage=ggimage+ggops # add user options at the end so can override our defaults
       print(ggimage)
