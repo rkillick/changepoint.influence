@@ -80,7 +80,9 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
       abline(v=original.cpts,col=col.cpts[[i]],lty=cpt.lty,lwd=cpt.lwd)
 
       hist(cpts/max,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),xlab='Changepoint locations')
-      segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
+      if(hist.tcpt.delete==FALSE){
+        segments(x0=original.cpts-0.5,y0=-1,y1=-0.1,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
+      }
       # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
       
       abline(h=max, col='grey')
@@ -88,7 +90,9 @@ location.stability=function(original.cpts, influence, data=NULL,include.data=FAL
     }
     else{ # same as above but title included on Histogram
       hist(cpts/max,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main='Location Stability',sub=paste(method,"method"),xlab='Changepoint locations')
-      segments(x0=original.cpts-0.5,y0=-100,y1=0,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
+      if(hist.tcpt.delete==FALSE){
+        segments(x0=original.cpts-0.5,y0=-1,y1=-0.1,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
+      }  
       # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
       
       abline(h=max, col='grey')
