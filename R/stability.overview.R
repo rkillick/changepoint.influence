@@ -1,10 +1,9 @@
-stability.overview=function(data, original.cpts, influence, cpt.lty="dashed",cpt.lwd=2,ylab=' ',xlab='Index', display.legend = T, legend.inset = c(0,1.2), legend.cex = 1, ...){
+stability.overview=function(data, original.cpts, influence,cpt.lwd=2,ylab=' ',xlab='Index', display.legend = T, legend.inset = c(0,1.2), legend.cex = 1, ...){
   # plots the original changepoints with colours indicating whether they have moved within the modify/delete methods
   
   # data              Vector of original data
   # original.cpts     The cpts in the original data
   # influence         The influenced cpts and parameters (output from influence.generate.** functions)
-  # cpt.lty           Line type for the changepoint lines
   # cpt.lwd           Line width for the changepoint lines
   # ylab              Label for the y-axis
   # ...               Other graphical parameters
