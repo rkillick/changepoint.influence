@@ -100,7 +100,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     
     ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(X1,X2,fill=value),show.legend=TRUE)+
       labs(x="Index\n\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
-      scale_fill_gradient2(low="#0072B2",mid="white",high="#DDCC77",midpoint=0, name="") # blue and red
+      scale_fill_gradient2(low="#0072B2",mid="white",high="#FFC20A",midpoint=0, name="") # blue and red
     ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts[[i]],alpha=0.8)
     ggimage=ggimage+theme_classic()+theme(legend.position="bottom")
     
