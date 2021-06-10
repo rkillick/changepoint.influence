@@ -1,4 +1,4 @@
-influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.data=FALSE,cpt.lty="dashed",cpt.lwd=2,ylab='',ggops=NULL){
+influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.data=FALSE,cpt.lwd=2,ylab='',ggops=NULL){
   # images the residuals of fit-expected for class
   
   # original.cpts     The cpts in the original data (not including 0 and n)
@@ -6,11 +6,11 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
   # expected          The expected segmentation based on original.cpts (if NULL is calculated using *.expected.mean functions)
   # data              The original time series
   # include.data      Logical, whether to include a plot of the original time series with cpts
-  # cpt.lty           Line type for the changepoint lines
   # cpt.lwd           Line width for the changepoint lines
   # ggops             Intended for additional ggplot2 options for influence map (see examples)
   
   col.cpts=list()
+  lty.cpts = list()
   
   n=nrow(influence[[1]]$class)
   ncpts=length(original.cpts)
@@ -84,25 +84,29 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     
     tcpts=table(cpts)
     
-    col.cpts[[i]]=rep("dark green",length(original.cpts))
+    col.cpts[[i]]=rep("#009E73",length(original.cpts))
+    lty.cpts[[i]]=rep("dashed",length(original.cpts))
     for(j in 1:ncpts){
       if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
-        col.cpts[[i]][j]="orange2"
+        col.cpts[[i]][j]="#E69F00"
+        lty.cpts[[i]]=rep("dotdash",length(original.cpts))
       }
     }
-    col.cpts[[i]][which(diff(original.cpts)==1)]="red"
-    col.cpts[[i]][which(diff(original.cpts)==1)+1]="red"
+    col.cpts[[i]][which(diff(original.cpts)==1)]="#D55E00"
+    col.cpts[[i]][which(diff(original.cpts)==1)+1]="#D55E00"
+    lty.cpts[[i]][which(diff(original.cpts)==1)]="dotted"
+    lty.cpts[[i]][which(diff(original.cpts)==1)+1]="dotted"
     names(col.cpts)[i]=names[i]
     
     ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(X1,X2,fill=value),show.legend=TRUE)+
       labs(x="Index\n\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
-      scale_fill_gradient2(low="blue",mid="white",high="red",midpoint=0, name="")
+      scale_fill_gradient2(low="#0072B2",mid="white",high="#DDCC77",midpoint=0, name="") # blue and red
     ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts[[i]],alpha=0.8)
     ggimage=ggimage+theme_classic()+theme(legend.position="bottom")
     
     if(include.data==TRUE){
       ggcpt=ggplot(data=data)+geom_line(aes(x=index,y=data))+ labs(x="Index", y = ylab)+
-              geom_vline(xintercept = original.cpts, colour = col.cpts[[i]], linetype = cpt.lty) # add cpts
+              geom_vline(xintercept = original.cpts, colour = col.cpts[[i]], linetype = lty.cpts[[i]]) # add cpts
       ggcpt=ggcpt+theme_classic()
       ggcpt=ggcpt+ggops # add user options at the end so can override our defaults
       ggcpt=ggplotGrob(ggcpt)
@@ -130,9 +134,14 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
       ggimage=ggimage+ggops # add user options at the end so can override our defaults
       print(ggimage)
     }
+    col.cpts[[i]][which(col.cpts[[i]]=="#009E73")] = "green"
+    col.cpts[[i]][which(col.cpts[[i]]=="#E69F00")] = "orange"
+    col.cpts[[i]][which(col.cpts[[i]]=="#D55E00")] = "red"
   }
   if(return){
     return(list(resid=resid,col.cpts=col.cpts))
   }
+  
+  
   return(col.cpts)
 }

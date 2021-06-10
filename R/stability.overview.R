@@ -9,7 +9,7 @@ stability.overview=function(data, original.cpts, influence,cpt.lwd=2,ylab=' ',xl
   # ...               Other graphical parameters
 
   col.cpts=list()
-  cpts.ltys = list()
+  lty.cpts = list()
   n=length(data)
   ncpts=length(original.cpts)
   
@@ -48,20 +48,20 @@ stability.overview=function(data, original.cpts, influence,cpt.lwd=2,ylab=' ',xl
     tcpts=table(cpts)
 
     col.cpts[[i]]=rep("#009E73",length(original.cpts)) # "dark green"
-    cpts.ltys[[i]]=rep("dashed",length(original.cpts)) # "dashed" for "green"
+    lty.cpts[[i]]=rep("dashed",length(original.cpts)) # "dashed" for "green"
     for(j in 1:ncpts){
       if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
         col.cpts[[i]][j]="#E69F00" # orange2
-        cpts.ltys[[i]][j]="dotdash" # "dotdash" for "orange"
+        lty.cpts[[i]][j]="dotdash" # "dotdash" for "orange"
       }
     }
     col.cpts[[i]][which(diff(original.cpts)==1)]="#D55E00" # red or other option #661100
     col.cpts[[i]][which(diff(original.cpts)==1)+1]="#D55E00" 
-    cpts.ltys[[i]][which(diff(original.cpts)==1)]="dotted" # "dotted" for "red
-    cpts.ltys[[i]][which(diff(original.cpts)==1)+1]="dotted" 
+    lty.cpts[[i]][which(diff(original.cpts)==1)]="dotted" # "dotted" for "red
+    lty.cpts[[i]][which(diff(original.cpts)==1)+1]="dotted" 
     names(col.cpts)[i]=names[i]
 
-    abline(v=original.cpts,col=col.cpts[[i]],lty=cpts.ltys[[i]],lwd=cpt.lwd) # cpt.lty
+    abline(v=original.cpts,col=col.cpts[[i]],lty=lty.cpts[[i]],lwd=cpt.lwd) # cpt.lty
     # do we want a legend to specify the colours or just leave it to the documentation?
     
     col.cpts[[i]][which(col.cpts[[i]]=="#009E73")] = "green"
