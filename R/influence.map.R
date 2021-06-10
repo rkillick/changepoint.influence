@@ -89,7 +89,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     for(j in 1:ncpts){
       if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
         col.cpts[[i]][j]="#E69F00"
-        lty.cpts[[i]]=rep("dotdash",length(original.cpts))
+        lty.cpts[[i]][j]="dotdash"
       }
     }
     col.cpts[[i]][which(diff(original.cpts)==1)]="#D55E00"
@@ -102,7 +102,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
       labs(x="Index\n\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
       scale_fill_gradient2(low="#0072B2",mid="white",high="#FFC20A",midpoint=0, name="") # blue and red
     ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts[[i]],alpha=0.8)
-    ggimage=ggimage+theme_classic()+theme(legend.position="bottom")
+    ggimage=ggimage+theme_classic()+theme(legend.position="bottom",legend.text=element_text(size=11))
     
     if(include.data==TRUE){
       ggcpt=ggplot(data=data)+geom_line(aes(x=index,y=data))+ labs(x="Index", y = ylab)+
@@ -126,7 +126,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
         gridtitleops$col=ggops$plot.title$colour
         gridtitleops$fontsize=ggops$plot.title$size
       }
-      grid.arrange(grobs = list(ggcpt, ggimage), layout_matrix=lay, top = textGrob(paste('Influence map using',method,"method"),gp=gridtitleops))
+      grid.arrange(grobs = list(ggcpt, ggimage), layout_matrix=lay, top = textGrob(paste('Influence map\n',method,"method"),gp=gridtitleops))
     }
     else{
       ggimage=ggimage+ggtitle(label='Influence map', subtitle=paste(method,"method"))+
