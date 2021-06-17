@@ -99,7 +99,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     names(col.cpts)[i]=names[i]
     
     ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(X1,X2,fill=value),show.legend=TRUE)+
-      labs(x="Index\n\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
+      labs(x="Index\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
       scale_fill_gradient2(low="#0072B2",mid="white",high="#FFC20A",midpoint=0, name="") # blue and red
     ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts[[i]],alpha=0.8)
     ggimage=ggimage+theme_classic()+theme(legend.position="bottom",legend.text=element_text(size=11))
@@ -129,7 +129,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
       grid.arrange(grobs = list(ggcpt, ggimage), layout_matrix=lay, top = textGrob(paste('Influence map\n',method,"method"),gp=gridtitleops))
     }
     else{
-      ggimage=ggimage+ggtitle(label='Influence map', subtitle=paste(method,"method"))+
+      ggimage=ggimage+ggtitle(label=paste('Influence map: ',method,"method"))+
         theme(plot.title = element_text(hjust = 0.5))
       ggimage=ggimage+ggops # add user options at the end so can override our defaults
       print(ggimage)

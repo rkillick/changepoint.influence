@@ -29,7 +29,7 @@ stability.overview=function(data, original.cpts, influence,cpt.lwd=2,ylab=' ',xl
 
     # plot(data,type='l',ylab=ylab,xlab=xlab,main='Stability dashboard',sub=paste(method,"method"),...) # plot the original time series
 
-    plot(data,type='l',ylab=ylab,xlab=xlab,main=paste("Stability dashboard \n", method,"method"),...) # plot the original time series
+    plot(data,type='l',ylab=ylab,xlab=xlab,main=paste("Stability dashboard: ", method,"method"),...) # plot the original time series
     
     cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))
     cpts=sort(cpts)

@@ -1,4 +1,4 @@
-parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',xlab='Index',...){
+parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',xlab='Index',cpt.col='red',cpt.width=3,...){
   # Function to plot the parameter stability across the influence modification
   # Note that this function
  
@@ -28,12 +28,16 @@ parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',xlab=
     counts=rbindlist(counts)
     
     plot(counts$index,counts$values,pch=20,col=hsv(v=0,alpha=0.3*(counts$counts/n+1)),lwd=0,#bg=hsv(v=0,alpha=0.5*(counts$counts/n+1)),
-         main='Parameter Stability',sub=paste(method,"method"),xlab=xlab,ylab=ylab,...)
+         main=paste('Parameter Stability: ',method,"method"),xlab=xlab,ylab=ylab,...)
     if(!is.null(original.mean)){
       if(length(original.mean)!=n){
         stop(paste('Length of original.mean must be',n))
       }
-      points(1:n,original.mean,col='red',pch=20)
+      rle.mean=rle(original.mean)
+      rle.mean$lengths=c(0,cumsum(rle.mean$lengths))
+      for(i in 1:length(rle.mean$values)){
+        segments(rle.mean$lengths[i]+1,rle.mean$values[i],rle.mean$lengths[i+1],rle.mean$values[i],col=cpt.col,lwd=cpt.width)
+      }
     }
   }
 }
