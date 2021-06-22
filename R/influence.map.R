@@ -1,4 +1,4 @@
-influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.data=FALSE,cpt.lwd=2,ylab='',ggops=NULL){
+InfluenceMap=function(original.cpts, influence, resid=NULL,data=NULL,influence.col=c("#0072B2","white","#FFC20A"),include.data=FALSE,cpt.lwd=2,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","dotted"),ylab='',ggops=NULL){
   # images the residuals of fit-expected for class
   
   # original.cpts     The cpts in the original data (not including 0 and n)
@@ -46,7 +46,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
   for(i in 1:length(influence)){
     method="Outlier"
     max=n-2
-    if(names[i]=="del"){
+    if(names[i]=="delete"){
       method="Deletion"
       max=n-1
       
@@ -71,7 +71,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))
     cpts=sort(cpts)
     
-    if(names[i]=="del"){
+    if(names[i]=="delete"){
       # create an index of cpts to delete as they are just a function of the deletion process
       del.correct.index=apply(matrix(original.cpts,ncol=1),1,FUN=function(x){return(which(cpts==(x+1))[1])})
       cpts=cpts[-del.correct.index]
@@ -84,23 +84,23 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
     
     tcpts=table(cpts)
     
-    col.cpts[[i]]=rep("#009E73",length(original.cpts))
-    lty.cpts[[i]]=rep("dashed",length(original.cpts))
+    col.cpts[[i]]=rep(cpt.col[1],length(original.cpts))
+    lty.cpts[[i]]=rep(cpt.lty[1],length(original.cpts))
     for(j in 1:ncpts){
       if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
-        col.cpts[[i]][j]="#E69F00"
-        lty.cpts[[i]][j]="dotdash"
+        col.cpts[[i]][j]=cpt.col[2]
+        lty.cpts[[i]][j]=cpt.lty[2]
       }
     }
-    col.cpts[[i]][which(diff(original.cpts)==1)]="#D55E00"
-    col.cpts[[i]][which(diff(original.cpts)==1)+1]="#D55E00"
-    lty.cpts[[i]][which(diff(original.cpts)==1)]="dotted"
-    lty.cpts[[i]][which(diff(original.cpts)==1)+1]="dotted"
+    col.cpts[[i]][which(diff(original.cpts)==1)]=cpt.col[3]
+    col.cpts[[i]][which(diff(original.cpts)==1)+1]=cpt.col[3]
+    lty.cpts[[i]][which(diff(original.cpts)==1)]=cpt.lty[3]
+    lty.cpts[[i]][which(diff(original.cpts)==1)+1]=cpt.lty[3]
     names(col.cpts)[i]=names[i]
     
     ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(X1,X2,fill=value),show.legend=TRUE)+
       labs(x="Index\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
-      scale_fill_gradient2(low="#0072B2",mid="white",high="#FFC20A",midpoint=0, name="") # blue and red
+      scale_fill_gradient2(low=influence.col[1],mid=influence.col[2],high=influence.col[3],midpoint=0, name="")
     ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts[[i]],alpha=0.8)
     ggimage=ggimage+theme_classic()+theme(legend.position="bottom",legend.text=element_text(size=11))
     
@@ -126,7 +126,7 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
         gridtitleops$col=ggops$plot.title$colour
         gridtitleops$fontsize=ggops$plot.title$size
       }
-      grid.arrange(grobs = list(ggcpt, ggimage), layout_matrix=lay, top = textGrob(paste('Influence map\n',method,"method"),gp=gridtitleops))
+      grid.arrange(grobs = list(ggcpt, ggimage), layout_matrix=lay, top = textGrob(paste('Influence map:',method,"method"),gp=gridtitleops))
     }
     else{
       ggimage=ggimage+ggtitle(label=paste('Influence map: ',method,"method"))+
@@ -134,9 +134,9 @@ influence.map=function(original.cpts, influence, resid=NULL,data=NULL,include.da
       ggimage=ggimage+ggops # add user options at the end so can override our defaults
       print(ggimage)
     }
-    col.cpts[[i]][which(col.cpts[[i]]=="#009E73")] = "green"
-    col.cpts[[i]][which(col.cpts[[i]]=="#E69F00")] = "orange"
-    col.cpts[[i]][which(col.cpts[[i]]=="#D55E00")] = "red"
+    col.cpts[[i]][which(col.cpts[[i]]==cpt.col[1])] = "stable"
+    col.cpts[[i]][which(col.cpts[[i]]==cpt.col[2])] = "unstable"
+    col.cpts[[i]][which(col.cpts[[i]]==cpt.col[3])] = "outlier"
   }
   if(return){
     return(list(resid=resid,col.cpts=col.cpts))

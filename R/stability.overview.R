@@ -1,4 +1,4 @@
-stability.overview=function(data, original.cpts, influence,cpt.lwd=2,ylab=' ',xlab='Index', display.legend = T, legend.inset = c(0,1.2), legend.cex = 1, ...){
+StabilityOverview=function(data, original.cpts, influence,cpt.lwd=2,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","dotted"),ylab=' ',xlab='Index', legend.args=list(display=TRUE,x="left",y=NULL,cex = 1,bty="n",horiz=TRUE,xpd=FALSE), ...){
   # plots the original changepoints with colours indicating whether they have moved within the modify/delete methods
   
   # data              Vector of original data
@@ -19,7 +19,7 @@ stability.overview=function(data, original.cpts, influence,cpt.lwd=2,ylab=' ',xl
   for(i in 1:length(influence)){
     method="Outlier"
     max=n-2
-    if(names[i]=="del"){
+    if(names[i]=="delete"){
       method="Deletion"
       max=n-1
       index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
@@ -27,14 +27,12 @@ stability.overview=function(data, original.cpts, influence,cpt.lwd=2,ylab=' ',xl
       influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
     }
 
-    # plot(data,type='l',ylab=ylab,xlab=xlab,main='Stability dashboard',sub=paste(method,"method"),...) # plot the original time series
-
     plot(data,type='l',ylab=ylab,xlab=xlab,main=paste("Stability dashboard: ", method,"method"),...) # plot the original time series
     
     cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))
     cpts=sort(cpts)
     
-    if(names[i]=="del"){
+    if(names[i]=="delete"){
       # create an index of cpts to delete as they are just a function of the deletion process
       del.correct.index=apply(matrix(original.cpts,ncol=1),1,FUN=function(x){return(which(cpts==(x+1))[1])})
       cpts=cpts[-del.correct.index]
@@ -47,32 +45,35 @@ stability.overview=function(data, original.cpts, influence,cpt.lwd=2,ylab=' ',xl
     
     tcpts=table(cpts)
 
-    col.cpts[[i]]=rep("#009E73",length(original.cpts)) # "dark green"
-    lty.cpts[[i]]=rep("dashed",length(original.cpts)) # "dashed" for "green"
+    col.cpts[[i]]=rep(cpt.col[1],length(original.cpts)) # "dark green"
+    lty.cpts[[i]]=rep(cpt.lty[1],length(original.cpts)) # "dashed" for "green"
     for(j in 1:ncpts){
       if(tcpts[which(names(tcpts)==as.character(original.cpts[j]))]!=max){
-        col.cpts[[i]][j]="#E69F00" # orange2
-        lty.cpts[[i]][j]="dotdash" # "dotdash" for "orange"
+        col.cpts[[i]][j]=cpt.col[2] # orange2
+        lty.cpts[[i]][j]=cpt.lty[2] # "dotdash" for "orange"
       }
     }
-    col.cpts[[i]][which(diff(original.cpts)==1)]="#D55E00" # red or other option #661100
-    col.cpts[[i]][which(diff(original.cpts)==1)+1]="#D55E00" 
-    lty.cpts[[i]][which(diff(original.cpts)==1)]="dotted" # "dotted" for "red
-    lty.cpts[[i]][which(diff(original.cpts)==1)+1]="dotted" 
+    col.cpts[[i]][which(diff(original.cpts)==1)]=cpt.col[3] # red or other option #661100
+    col.cpts[[i]][which(diff(original.cpts)==1)+1]=cpt.col[3] 
+    lty.cpts[[i]][which(diff(original.cpts)==1)]=cpt.lty[3] # "dotted" for "red
+    lty.cpts[[i]][which(diff(original.cpts)==1)+1]=cpt.lty[3]
     names(col.cpts)[i]=names[i]
 
     abline(v=original.cpts,col=col.cpts[[i]],lty=lty.cpts[[i]],lwd=cpt.lwd) # cpt.lty
     # do we want a legend to specify the colours or just leave it to the documentation?
     
-    col.cpts[[i]][which(col.cpts[[i]]=="#009E73")] = "green"
-    col.cpts[[i]][which(col.cpts[[i]]=="#E69F00")] = "orange"
-    col.cpts[[i]][which(col.cpts[[i]]=="#D55E00")] = "red"
+    # change colours to something meaningful to return to the user
+    col.cpts[[i]][which(col.cpts[[i]]==cpt.col[1])] = "stable"
+    col.cpts[[i]][which(col.cpts[[i]]==cpt.col[2])] = "unstable"
+    col.cpts[[i]][which(col.cpts[[i]]==cpt.col[3])] = "outlier"
     
-    if(display.legend){
-      legend("top", c("stable", "unstable", "outlier"), 
-             lty=c(2,4,3), lwd = rep(3,3),
-             col = c("#009E73", "#E69F00", "#D55E00"),
-             inset=legend.inset, xpd=T, horiz=TRUE, bty="n", cex = legend.cex)
+    if(legend.args$display){
+      legend(x=legend.args$x,y=legend.args$y,
+             legend=c("stable", "unstable", "outlier"),
+             lty=cpt.lty, lwd = cpt.lwd,
+             col = cpt.col,
+             xpd=legend.args$xpd, horiz=legend.args$horiz, 
+             bty=legend.args$bty, cex = legend.args$cex)
     }
 
   }

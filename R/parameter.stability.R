@@ -1,4 +1,4 @@
-parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',xlab='Index',cpt.col='red',cpt.width=3,...){
+ParameterStability=function(influence,original.mean=NULL,digits=6,ylab='',xlab='Index',cpt.col='red',cpt.width=3,...){
   # Function to plot the parameter stability across the influence modification
   # Note that this function
  
@@ -12,7 +12,7 @@ parameter.stability=function(influence,original.mean=NULL,digits=6,ylab='',xlab=
   for(i in 1:length(influence)){
     method="Deletion"
     max=n-1
-    if(names[i]=="out"){
+    if(names[i]=="outlier"){
       method="Outlier"
       max=n
       # remove the known outlier points

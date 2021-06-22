@@ -1,4 +1,4 @@
-loo.ind.PELT=function(del.point,data,...){
+loo.ind.cpt=function(del.point,data,...){
   # function to generate a single loo dataset and apply the PELT algorithm to the data
   
   # del.point     The index of the point to delete
@@ -12,8 +12,8 @@ loo.ind.PELT=function(del.point,data,...){
   # generate the data
   data=data[-del.point]
   
-  # apply the PELT approach
-  del.ans=cpt.mean(data,method='PELT',...)
+  # apply the changepoint approach to the reduced data
+  del.ans=cpt.mean(data,...)
   
   # retreieve the relevant output
   # class vector

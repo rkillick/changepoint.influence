@@ -1,4 +1,4 @@
-moo.ind.PELT=function(out.point,data,range,pos=TRUE,same=FALSE,sd=0.01,...){
+moo.ind.cpt=function(out.point,data,range,pos=TRUE,same=FALSE,sd=0.01,...){
   # function to generate a single moo dataset and apply the PELT algorithm to the data
   
   # out.point     The index of the point to modify
@@ -17,7 +17,7 @@ moo.ind.PELT=function(out.point,data,range,pos=TRUE,same=FALSE,sd=0.01,...){
   data[out.point]=make.many.outlier(data[out.point],range.data=range,pos=pos,same=same,sd=sd)
 
   # apply the PELT approach
-  outlier.ans=cpt.mean(data,method='PELT',...)
+  outlier.ans=cpt.mean(data,...)
   
   # return the new cpt object
   return(outlier.ans)
