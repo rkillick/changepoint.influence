@@ -86,7 +86,7 @@ LocationStability=function(original.cpts, influence, data=NULL,include.data=FALS
       abline(v=original.cpts,col=col.cpts[[i]],lty=lty.cpts[[i]],lwd=cpt.lwd) # cpt.lty
       
       if(hist.tcpt.delete==TRUE){
-        hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',main='')
+        hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',ylab="Count",main='')
         yaxplength=par("yaxp")[2]-par("yaxp")[1]
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       }
@@ -100,7 +100,7 @@ LocationStability=function(original.cpts, influence, data=NULL,include.data=FALS
     }
     else{ # same as above but title included on Histogram
       if(hist.tcpt.delete==TRUE){
-        hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),xlab='Changepoint locations')
+        hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),xlab='Changepoint locations',ylab="Count")
         yaxplength=par("yaxp")[2]-par("yaxp")[1]
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       }
