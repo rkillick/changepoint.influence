@@ -1,4 +1,4 @@
-del.expected.mean=function(original.class){
+delete.expected.mean=function(original.class){
   # Calculates the expected segmentations for LOO based on an original segmentation
   
   # original.class    The class of the original segmentation

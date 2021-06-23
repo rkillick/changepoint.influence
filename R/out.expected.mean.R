@@ -1,4 +1,4 @@
-out.expected.mean=function(original.class){
+outlier.expected.mean=function(original.class){
   # Calculates the expected segmentations for MOO based on an original segmentation
   
   # original.class    The class of the original segmentation

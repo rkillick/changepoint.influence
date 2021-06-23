@@ -17,7 +17,7 @@ ParameterStability=function(influence,original.mean=NULL,digits=6,ylab='',xlab='
       max=n
       # remove the known outlier points
       for(j in 1:n){
-        influence$out$param.out[j,j]=NA
+        influence[[i]]$param.out[j,j]=NA
       }
     }
     counts=apply(matrix(1:n,ncol=1),1,FUN=function(x,influence,digits,i){
