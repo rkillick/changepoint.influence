@@ -1,4 +1,4 @@
-LocationStability=function(original.cpts, influence, type=c("Difference","Global","Local"),data=NULL,include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","dotted"),ylab='',xlab='Index',...){
+LocationStability=function(original.cpts, influence, type=c("Difference","Global","Local"),data=NULL,include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","twodash"),ylab='',xlab='Index',...){
   # histograms the changepoint locations identified
   
   # original.cpts     The cpts in the original data
@@ -11,7 +11,7 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
   # cpt.lty           Line type for the changepoint lines (length 3)
   # ylab              Label for the y-axis
   # ...               Additional graphical parameters
-  if(any(type!=c("Difference","Global","Local"))){
+  if(!any(type==c("Difference","Global","Local"))){
     stop("type should be Difference, Global, or Local.")
   }
   
@@ -51,14 +51,8 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
       cpts=cpts[-del.outlier.index]
     }
     
-    if(type=="Difference"){
-      fcpts=factor(cpts,levels=1:n) # factor so it includes all data points
-      tcpts=table(fcpts)
-    }
-    else{
-      tcpts=table(cpts)
-    }
-    
+    tcpts=table(cpts)
+
     col.cpts[[i]]=rep(cpt.col[1],length(original.cpts)) # "dark green"
     lty.cpts[[i]]=rep(cpt.lty[1],length(original.cpts)) # "dashed" for "green"
     for(j in 1:ncpts){
@@ -71,16 +65,15 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
     col.cpts[[i]][which(diff(original.cpts)==1)+1]=cpt.col[3]
     lty.cpts[[i]][which(diff(original.cpts)==1)]=cpt.lty[3] # "dotted" for "red
     lty.cpts[[i]][which(diff(original.cpts)==1)+1]=cpt.lty[3]
+    
     names(col.cpts)[i]=names[i]
     
     if(type=="Difference"){
-      tcpts[original.cpts]=tcpts[original.cpts]-max # difference from expected
+        fcpts=factor(cpts,levels=1:n) # factor so it includes all data points
+        tcpts=table(fcpts)
+        tcpts[original.cpts]=tcpts[original.cpts]-max # difference from expected
     }
-    
-    hist.col=rep(1,n)
-    hist.col[original.cpts]=col.cpts[[i]]
-    if(type=="Local"){
-      hist.col[original.cpts]=1
+    else if(type=="Local"){
       for(j in 1:ncpts){
         tmp=which(cpts==original.cpts[j])
         if(length(tmp)!=0){
@@ -88,6 +81,9 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
         }
       }
     }
+
+    hist.col=rep(1,n)
+    hist.col[original.cpts]=col.cpts[[i]]
 
     if(include.data==TRUE){
       if(is.null(data)){
@@ -99,18 +95,18 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
       abline(v=original.cpts,col=col.cpts[[i]],lty=lty.cpts[[i]],lwd=cpt.lwd) # cpt.lty
       
       if(type=="Local"){
-        hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',ylab="Count",main='',...)
+        hist(cpts,col=1,breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',ylab="Local Count",main='',...)
         yaxplength=par("yaxp")[2]-par("yaxp")[1]
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       }
       else if(type=="Difference"){
-        plot(tcpts,type='h',col=hist.col,lty=lty.cpts[[i]],xlab='Changepoint locations',ylab="Difference from expected",main='',...)
+        plot(tcpts,type='h',col=hist.col,xlab='Changepoint locations',ylab="Difference from expected",main='',...)
         # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
         xaxp=par("xaxp")
         axis(side=1,at=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)),labels=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)))
       }
       else{
-        hist(cpts,col=hist.col,border=hist.col,yaxt='n',breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',ylab="Proportion",main='',...)
+        hist(cpts,col=hist.col,border=hist.col,yaxt='n',breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',ylab="Gloabl Proportion",main='',...)
         axis(side=2,at=round(c(0,max/4,max/2,3*max/4,max),2),labels=c(0,0.25,0.5,0.75,1))
       }
       # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
@@ -119,7 +115,7 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
     }
     else{ # same as above but title included on Histogram
       if(type=="Local"){
-        hist(cpts,col=hist.col,border=hist.col,breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),xlab='Changepoint locations',ylab="Count",...)
+        hist(cpts,col=1,breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),xlab='Changepoint locations',ylab="Local Count",...)
         yaxplength=par("yaxp")[2]-par("yaxp")[1]
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       }
@@ -129,7 +125,7 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
         axis(side=1,at=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)),labels=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)))
       }
       else{
-        hist(cpts,col=hist.col,border=hist.col,yaxt='n',breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),ylab="Proportion",xlab='Changepoint locations',...)
+        hist(cpts,col=hist.col,border=hist.col,yaxt='n',breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),ylab="Global Proportion",xlab='Changepoint locations',...)
         axis(side=2,at=round(c(0,max/4,max/2,3*max/4,max),2),labels=c(0,0.25,0.5,0.75,1), ...)
       }
       # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n

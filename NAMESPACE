@@ -10,5 +10,5 @@ importFrom("data.table","rbindlist")
 importFrom("graphics","par","abline","segments","axis","legend","hist")
 
 export("InfluenceMap","ParameterStability","LocationStability",
-       "StabilityOverview","location.stabilityDIFF") # plots
+       "StabilityOverview") # plots
 exportMethods("influence")
