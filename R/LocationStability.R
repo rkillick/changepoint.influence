@@ -100,7 +100,7 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       }
       else if(type=="Difference"){
-        plot(tcpts,type='h',col=hist.col,xlab='Changepoint locations',ylab="Difference from expected",main='',...)
+        plot(tcpts,type='h',col=hist.col,xlab='Changepoint locations',ylab="Difference from maximum",main='',...)
         # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
         xaxp=par("xaxp")
         axis(side=1,at=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)),labels=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)))
@@ -120,7 +120,7 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       }
       else if(type=="Difference"){
-        plot(tcpts,col=hist.col,xaxt='n',ylim=c(min(tcpts),max(tcpts)),main=paste('Location Stability: ',method,"method"),ylab="Difference from expected",xlab='Changepoint locations',...)
+        plot(tcpts,col=hist.col,xaxt='n',ylim=c(min(tcpts),max(tcpts)),main=paste('Location Stability: ',method,"method"),ylab="Difference from maximum",xlab='Changepoint locations',...)
         xaxp=par("xaxp")
         axis(side=1,at=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)),labels=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)))
       }
