@@ -1,11 +1,10 @@
-LocationStability=function(original.cpts, influence, resid=NULL,type=c("Difference","Global","Local"),data=NULL,include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","twodash"),ylab='',xlab='Index',...){
+LocationStability=function(original.cpts, influence, expected.class=NULL,type=c("Difference","Global","Local"),data=NULL,include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","twodash"),ylab='',xlab='Index',...){
   # histograms the changepoint locations identified
   
   # original.cpts     The cpts in the original data
   # influence         The influenced cpts and parameters (output from influence.generate.** functions)
   # data              Include if you want the data plotted
   # include.data      True if you want to plot the data too
-  # hist.tcpt.delete  If true plots the histogram with the true changepoints deleted so you can see the moved changes more easily
   # cpt.lwd           Line width for the changepoint lines
   # cpt.col           Colour of the changepoint lines (length 3)
   # cpt.lty           Line type for the changepoint lines (length 3)
@@ -25,8 +24,8 @@ LocationStability=function(original.cpts, influence, resid=NULL,type=c("Differen
   names=names(influence)
 
   return=0
-  # if the resid isn't given it needs calculating
-  if((type=="Difference")&(is.null(resid))){
+  # if the expected isn't given it needs calculating
+  if((type=="Difference")&(is.null(expected.class))){
     return=1
     expected=list()
     
@@ -49,11 +48,11 @@ LocationStability=function(original.cpts, influence, resid=NULL,type=c("Differen
       influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
       influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
 
-      if((type=="Difference")&(is.null(resid))){
+      if((type=="Difference")&(is.null(expected.class))){
         # repeat for expected
-        index.na=which(is.na(expected$del))[-1] # -1 as we will deal with the first instance separately
-        expected$del[index.na]=expected$del[index.na-n] # replace NA with previous index
-        expected$del[1,1]=1 # replace the first NA with 1
+        index.na=which(is.na(expected$delete))[-1] # -1 as we will deal with the first instance separately
+        expected$delete[index.na]=expected$delete[index.na-n] # replace NA with previous index
+        expected$delete[1,1]=1 # replace the first NA with 1
       }
     }
     
@@ -89,15 +88,18 @@ LocationStability=function(original.cpts, influence, resid=NULL,type=c("Differen
     names(col.cpts)[i]=names[i]
     
     if(type=="Difference"){
-      if(is.null(resid)){
-        resid=influence[[i]]$class-expected[[i]]
-        ########### note the partial matching used here (class.del or class.out)
-      }
-      mresid=reshape::melt(t(resid))
+      # need to calculated the changepoints from the classes for both observed and expected
+      cpts.observed=unlist(apply(influence[[i]]$class,MARGIN=1,FUN=function(x){
+        return(which(diff(x)!=0))}))
+      ########### note the partial matching used here (class.del or class.out)
+      cpts.observed=factor(cpts.observed,levels=1:n)
+      tcpts.observed=table(cpts.observed)
+      cpts.expected=unlist(apply(expected[[i]],MARGIN=1,FUN=function(x){
+        return(which(diff(x)!=0))}))
+      cpts.expected=factor(cpts.expected,levels=1:n)
+      tcpts.expected=table(cpts.expected)
       
-      colresid=colSums(resid,na.rm=T)[original.cpts]
-      rowresid=rowSums(resid,na.rm=T)[-original.cpts]
-      
+      tresid=tcpts.observed-tcpts.expected
     }
     else if(type=="Local"){
       for(j in 1:ncpts){
@@ -126,7 +128,7 @@ LocationStability=function(original.cpts, influence, resid=NULL,type=c("Differen
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       }
       else if(type=="Difference"){
-        plot(tcpts,type='h',col=hist.col,xlab='Changepoint locations',ylab="Difference from maximum",main='',...)
+        plot(tresid,type='h',col=hist.col,xlab='Changepoint locations',ylab="Difference from expected",main='',...)
         # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
         xaxp=par("xaxp")
         axis(side=1,at=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)),labels=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)))
@@ -146,7 +148,7 @@ LocationStability=function(original.cpts, influence, resid=NULL,type=c("Differen
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
       }
       else if(type=="Difference"){
-        plot(tcpts,col=hist.col,xaxt='n',ylim=c(min(tcpts),max(tcpts)),main=paste('Location Stability: ',method,"method"),ylab="Difference from maximum",xlab='Changepoint locations',...)
+        plot(tresid,col=hist.col,xaxt='n',ylim=c(min(tresid),max(tresid)),main=paste('Location Stability: ',method,"method"),ylab="Difference from expected",xlab='Changepoint locations',...)
         xaxp=par("xaxp")
         axis(side=1,at=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)),labels=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)))
       }
