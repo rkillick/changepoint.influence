@@ -77,7 +77,5 @@ StabilityOverview=function(data, original.cpts, influence,cpt.lwd=2,cpt.col=c("#
     }
 
   }
-  
-
   return(col.cpts)
 }

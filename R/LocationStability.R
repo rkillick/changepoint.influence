@@ -1,4 +1,4 @@
-LocationStability=function(original.cpts, influence, type=c("Difference","Global","Local"),data=NULL,include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","twodash"),ylab='',xlab='Index',...){
+LocationStability=function(original.cpts, influence, resid=NULL,type=c("Difference","Global","Local"),data=NULL,include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","twodash"),ylab='',xlab='Index',...){
   # histograms the changepoint locations identified
   
   # original.cpts     The cpts in the original data
@@ -23,6 +23,19 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
 
   original.class=rep(1:(ncpts+1),times=diff(c(0,original.cpts,n)))
   names=names(influence)
+
+  return=0
+  # if the resid isn't given it needs calculating
+  if((type=="Difference")&(is.null(resid))){
+    return=1
+    expected=list()
+    
+    for(i in 1:length(influence)){
+      if(eval(parse(text=paste("is.null(expected$",names[i],")",sep="")))){
+        eval(parse(text=paste("expected$",names[i],"=",names[i],".expected.mean(original.class)",sep=""))) # calculated the expected
+      }
+    }
+  }
   
   for(i in 1:length(influence)){
     method="Outlier"
@@ -35,6 +48,13 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
       index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
       influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
       influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
+
+      if((type=="Difference")&(is.null(resid))){
+        # repeat for expected
+        index.na=which(is.na(expected$del))[-1] # -1 as we will deal with the first instance separately
+        expected$del[index.na]=expected$del[index.na-n] # replace NA with previous index
+        expected$del[1,1]=1 # replace the first NA with 1
+      }
     }
     
     cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))
@@ -69,9 +89,15 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
     names(col.cpts)[i]=names[i]
     
     if(type=="Difference"){
-        fcpts=factor(cpts,levels=1:n) # factor so it includes all data points
-        tcpts=table(fcpts)
-        tcpts[original.cpts]=tcpts[original.cpts]-max # difference from expected
+      if(is.null(resid)){
+        resid=influence[[i]]$class-expected[[i]]
+        ########### note the partial matching used here (class.del or class.out)
+      }
+      mresid=reshape::melt(t(resid))
+      
+      colresid=colSums(resid,na.rm=T)[original.cpts]
+      rowresid=rowSums(resid,na.rm=T)[-original.cpts]
+      
     }
     else if(type=="Local"){
       for(j in 1:ncpts){
@@ -137,6 +163,9 @@ LocationStability=function(original.cpts, influence, type=c("Difference","Global
     col.cpts[[i]][which(col.cpts[[i]]==cpt.col[2])] = "unstable"
     col.cpts[[i]][which(col.cpts[[i]]==cpt.col[3])] = "outlier"
     
+  }
+  if(return){
+    return(list(resid=resid,col.cpts=col.cpts))
   }
   return(col.cpts)
 }

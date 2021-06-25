@@ -98,7 +98,8 @@ InfluenceMap=function(original.cpts, influence, resid=NULL,data=NULL,influence.c
     lty.cpts[[i]][which(diff(original.cpts)==1)+1]=cpt.lty[3]
     names(col.cpts)[i]=names[i]
     
-    ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(data$X1,data$X2,fill=data$value),show.legend=TRUE)+
+    data=melt(t(resid))
+    ggimage=ggplot()+geom_raster(data,aes(data$X1,data$X2,fill=data$value),show.legend=TRUE)+
       labs(x="Index\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
       scale_fill_gradient2(low=influence.col[1],mid=influence.col[2],high=influence.col[3],midpoint=0, name="")
     ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(data$x, data$y),colour=col.cpts[[i]],alpha=0.8)
