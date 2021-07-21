@@ -1,4 +1,4 @@
-InfluenceMap=function(original.cpts, influence, resid=NULL,data=NULL,influence.col=c("#0072B2","white","#FFC20A"),include.data=FALSE,cpt.lwd=2,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","dotted"),ylab='',ggops=NULL){
+InfluenceMap=function(original.cpts, influence, resid=NULL,data=NULL,influence.col=c("#0C4479","white","#AB9783"),include.data=FALSE,cpt.lwd=2,cpt.col=c("#009E73", "#E69F00", "#E41A1C"),cpt.lty=c("dashed","dotdash","dotted"),ylab='',ggops=NULL){
   # images the residuals of fit-expected for class
   
   # original.cpts     The cpts in the original data (not including 0 and n)

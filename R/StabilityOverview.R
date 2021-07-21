@@ -1,4 +1,4 @@
-StabilityOverview=function(data, original.cpts, influence,cpt.lwd=2,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","dotted"),ylab=' ',xlab='Index', legend.args=list(display=TRUE,x="left",y=NULL,cex = 1,bty="n",horiz=TRUE,xpd=FALSE), ...){
+StabilityOverview=function(data, original.cpts, influence,cpt.lwd=2,cpt.col=c("#009E73", "#E69F00", "#E41A1C"),cpt.lty=c("dashed","dotdash","dotted"),ylab=' ',xlab='Index', legend.args=list(display=TRUE,x="left",y=NULL,cex = 1,bty="n",horiz=TRUE,xpd=FALSE), ...){
   # plots the original changepoints with colours indicating whether they have moved within the modify/delete methods
   
   # data              Vector of original data

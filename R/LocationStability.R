@@ -1,4 +1,4 @@
-LocationStability=function(original.cpts, influence, expected.class=NULL,type=c("Difference","Global","Local"),data=NULL,include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#D55E00"),cpt.lty=c("dashed","dotdash","twodash"),ylab='',xlab='Index',...){
+LocationStability=function(original.cpts, influence, expected.class=NULL,type=c("Difference","Global","Local"),data=NULL,include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#E41A1C"),cpt.lty=c("dashed","dotdash","twodash"),ylab='',xlab='Index',...){
   # histograms the changepoint locations identified
   
   # original.cpts     The cpts in the original data
