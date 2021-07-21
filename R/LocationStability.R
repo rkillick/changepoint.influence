@@ -100,6 +100,7 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
       tcpts.expected=table(cpts.expected)
       
       tresid=tcpts.observed-tcpts.expected
+      tresid=as.vector(tresid)
     }
     else if(type=="Local"){
       for(j in 1:ncpts){
@@ -126,19 +127,23 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
         hist(cpts,col=1,breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',ylab="Local Count",main='',...)
         yaxplength=par("yaxp")[2]-par("yaxp")[1]
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
+        abline(h=max, col='grey')
       }
       else if(type=="Difference"){
-        plot(tresid,type='h',col=hist.col,xlab='Changepoint locations',ylab="Difference from expected",main='',...)
-        # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
-        xaxp=par("xaxp")
-        axis(side=1,at=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)),labels=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)))
+        plot(tresid,type='n',col=hist.col,xlab='Changepoint locations',ylab="Difference from expected",main='',...)
+        abline(h=0,col=1)
+        to.plot=which(tresid!=0) # locations which are not 0
+        for(seg in 1:length(to.plot)){
+          if(any(to.plot[seg]==original.cpts)){lty.seg=lty.cpts[[i]][which(to.plot[seg]==original.cpts)]}else{lty.seg="solid"}
+          segments(to.plot[seg],0,to.plot[seg],tresid[to.plot[seg]],col=hist.col[to.plot[seg]],lty=lty.seg)
+        }
       }
       else{
         hist(cpts,col=hist.col,border=hist.col,yaxt='n',breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',ylab="Gloabl Proportion",main='',...)
         axis(side=2,at=round(c(0,max/4,max/2,3*max/4,max),2),labels=c(0,0.25,0.5,0.75,1))
+        abline(h=max, col='grey')
       }
       # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
-      abline(h=max, col='grey')
       par(op) # reset previous parameters
     }
     else{ # same as above but title included on Histogram
@@ -146,19 +151,24 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
         hist(cpts,col=1,breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),xlab='Changepoint locations',ylab="Local Count",...)
         yaxplength=par("yaxp")[2]-par("yaxp")[1]
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
+        abline(h=max, col='grey')
       }
       else if(type=="Difference"){
-        plot(tresid,col=hist.col,xaxt='n',ylim=c(min(tresid),max(tresid)),main=paste('Location Stability: ',method,"method"),ylab="Difference from expected",xlab='Changepoint locations',...)
-        xaxp=par("xaxp")
-        axis(side=1,at=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)),labels=round(seq(from=xaxp[1],to=xaxp[2],length.out=xaxp[3]+1)))
+        plot(tresid,type='n',col=hist.col,main=paste('Location Stability: ',method,"method"),xlab='Changepoint locations',ylab="Difference from expected",...)
+        abline(h=0,col=1)
+        to.plot=which(tresid!=0) # locations which are not 0
+        for(seg in 1:length(to.plot)){
+          if(any(to.plot[seg]==original.cpts)){lty.seg=lty.cpts[[i]][which(to.plot[seg]==original.cpts)]}else{lty.seg="solid"}
+          segments(to.plot[seg],0,to.plot[seg],tresid[to.plot[seg]],col=hist.col[to.plot[seg]],lty=lty.seg)
+        }
       }
       else{
         hist(cpts,col=hist.col,border=hist.col,yaxt='n',breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),ylab="Global Proportion",xlab='Changepoint locations',...)
         axis(side=2,at=round(c(0,max/4,max/2,3*max/4,max),2),labels=c(0,0.25,0.5,0.75,1), ...)
+        abline(h=max, col='grey')
       }
       # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
 
-      abline(h=max, col='grey')
     }
     # change colours to something meaningful to return to the user
     col.cpts[[i]][which(col.cpts[[i]]==cpt.col[1])] = "stable"
