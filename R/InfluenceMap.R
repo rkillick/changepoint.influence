@@ -1,13 +1,8 @@
 InfluenceMap=function(original.cpts, influence, resid=NULL,data=NULL,influence.col=c("#0C4479","white","#AB9783"),include.data=FALSE,cpt.lwd=2,cpt.col=c("#009E73", "#E69F00", "#E41A1C"),cpt.lty=c("dashed","dotdash","dotted"),ylab='',ggops=NULL){
   # images the residuals of fit-expected for class
   
-  # original.cpts     The cpts in the original data (not including 0 and n)
-  # influence         The influenced cpts and parameters (output from influence.generate.** functions)
-  # expected          The expected segmentation based on original.cpts (if NULL is calculated using *.expected.mean functions)
-  # data              The original time series
-  # include.data      Logical, whether to include a plot of the original time series with cpts
-  # cpt.lwd           Line width for the changepoint lines
-  # ggops             Intended for additional ggplot2 options for influence map (see examples)
+  ## Setting variables used by ggplot below to avoid no visible binding error in CRAN checks:
+  X1=X2=value=index=NULL
   
   col.cpts=list()
   lty.cpts = list()
@@ -101,7 +96,7 @@ InfluenceMap=function(original.cpts, influence, resid=NULL,data=NULL,influence.c
     ggimage=ggplot()+geom_raster(data=melt(t(resid)),aes(X1,X2,fill=value),show.legend=TRUE)+
       labs(x="Index\nFewer Cpts                        More Cpts", y = "Altered Data Point")+
       scale_fill_gradient2(low=influence.col[1],mid=influence.col[2],high=influence.col[3],midpoint=0, name="")
-    ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(x=original.cpts,y=original.cpts), aes(x, y),colour=col.cpts[[i]],alpha=0.8)
+    ggimage=ggimage+geom_abline(slope=1,colour="grey")+geom_point(data = data.frame(X1=original.cpts,X2=original.cpts), aes(X1, X2),colour=col.cpts[[i]],alpha=0.8)
     ggimage=ggimage+theme_classic()+theme(legend.position="bottom",legend.text=element_text(size=11))
     
     if(include.data==TRUE){

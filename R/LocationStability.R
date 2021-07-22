@@ -1,15 +1,6 @@
 LocationStability=function(original.cpts, influence, expected.class=NULL,type=c("Difference","Global","Local"),data=NULL,include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#E41A1C"),cpt.lty=c("dashed","dotdash","dotted"),ylab='',xlab='Index',...){
   # histograms the changepoint locations identified
   
-  # original.cpts     The cpts in the original data
-  # influence         The influenced cpts and parameters (output from influence.generate.** functions)
-  # data              Include if you want the data plotted
-  # include.data      True if you want to plot the data too
-  # cpt.lwd           Line width for the changepoint lines
-  # cpt.col           Colour of the changepoint lines (length 3)
-  # cpt.lty           Line type for the changepoint lines (length 3)
-  # ylab              Label for the y-axis
-  # ...               Additional graphical parameters
   if(!any(type==c("Difference","Global","Local"))){
     stop("type should be Difference, Global, or Local.")
   }
@@ -177,7 +168,7 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
     
   }
   if(return){
-    return(list(resid=resid,col.cpts=col.cpts))
+    return(list(expected=expected,col.cpts=col.cpts))
   }
   return(col.cpts)
 }

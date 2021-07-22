@@ -2,10 +2,6 @@ ParameterStability=function(influence,original.mean=NULL,digits=6,ylab='',xlab='
   # Function to plot the parameter stability across the influence modification
   # Note that this function
  
-  # influence         The influenced cpts and parameters (output from influence.generate.** functions)
-  # original.mean     If supplied, n length vector of the original mean is plotted on top of the influence values
-  # digits            The number of significant digits to round to before counting unique parameter values, can be Inf to not round
-  
   n=nrow(influence[[1]]$class)
   names=names(influence)
   
