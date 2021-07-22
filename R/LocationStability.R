@@ -16,7 +16,7 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
 
   return=0
   # if the expected isn't given it needs calculating
-  if((type=="Difference")&(is.null(expected.class))){
+  if((any(type=="Difference"))&(is.null(expected.class))){
     return=1
     expected=list()
     
@@ -39,7 +39,7 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
       influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
       influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
 
-      if((type=="Difference")&(is.null(expected.class))){
+      if((any(type=="Difference"))&(is.null(expected.class))){
         # repeat for expected
         index.na=which(is.na(expected$delete))[-1] # -1 as we will deal with the first instance separately
         expected$delete[index.na]=expected$delete[index.na-n] # replace NA with previous index
@@ -78,7 +78,7 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
     
     names(col.cpts)[i]=names[i]
     
-    if(type=="Difference"){
+    if(any(type=="Difference")){
       # need to calculated the changepoints from the classes for both observed and expected
       cpts.observed=unlist(apply(influence[[i]]$class,MARGIN=1,FUN=function(x){
         return(which(diff(x)!=0))}))
@@ -93,14 +93,6 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
       tresid=tcpts.observed-tcpts.expected
       tresid=as.vector(tresid)
     }
-    else if(type=="Local"){
-      for(j in 1:ncpts){
-        tmp=which(cpts==original.cpts[j])
-        if(length(tmp)!=0){
-          cpts=cpts[-tmp]
-        }
-      }
-    }
 
     hist.col=rep(1,n)
     hist.col[original.cpts]=col.cpts[[i]]
@@ -114,13 +106,25 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
       plot(data,type='l',ylab=ylab,xlab=xlab,main=paste('Location Stability: ',method,"method"),...) # plot the original time series
       abline(v=original.cpts,col=col.cpts[[i]],lty=lty.cpts[[i]],lwd=cpt.lwd) # cpt.lty
       
-      if(type=="Local"){
+      if(any(type=="Global")){
+        hist(cpts,col=hist.col,border=hist.col,yaxt='n',breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',ylab="Gloabl Proportion",main='',...)
+        axis(side=2,at=round(c(0,max/4,max/2,3*max/4,max),2),labels=c(0,0.25,0.5,0.75,1))
+        abline(h=max, col='grey')
+      }
+      # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
+      if(any(type=="Local")){
+        for(j in 1:ncpts){ # remove original changepoints from plotting
+          tmp=which(cpts==original.cpts[j])
+          if(length(tmp)!=0){
+            cpts=cpts[-tmp]
+          }
+        }
         hist(cpts,col=1,breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',ylab="Local Count",main='',...)
         yaxplength=par("yaxp")[2]-par("yaxp")[1]
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
         abline(h=max, col='grey')
       }
-      else if(type=="Difference"){
+      if(any(type=="Difference")){
         plot(tresid,type='n',col=hist.col,xlab='Changepoint locations',ylab="Difference from expected",main='',...)
         abline(h=0,col=1)
         to.plot=which(tresid!=0) # locations which are not 0
@@ -129,22 +133,28 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
           segments(to.plot[seg],0,to.plot[seg],tresid[to.plot[seg]],col=hist.col[to.plot[seg]],lty=lty.seg)
         }
       }
-      else{
-        hist(cpts,col=hist.col,border=hist.col,yaxt='n',breaks=0:n,xlim=c(0,n),xlab='Changepoint locations',ylab="Gloabl Proportion",main='',...)
-        axis(side=2,at=round(c(0,max/4,max/2,3*max/4,max),2),labels=c(0,0.25,0.5,0.75,1))
-        abline(h=max, col='grey')
-      }
-      # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
       par(op) # reset previous parameters
     }
     else{ # same as above but title included on Histogram
-      if(type=="Local"){
+      if(any(type=="Global")){
+        hist(cpts,col=hist.col,border=hist.col,yaxt='n',breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),ylab="Global Proportion",xlab='Changepoint locations',...)
+        axis(side=2,at=round(c(0,max/4,max/2,3*max/4,max),2),labels=c(0,0.25,0.5,0.75,1), ...)
+        abline(h=max, col='grey')
+      }
+      # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
+      if(any(type=="Local")){
+        for(j in 1:ncpts){ # remove original changepoints from plotting
+          tmp=which(cpts==original.cpts[j])
+          if(length(tmp)!=0){
+            cpts=cpts[-tmp]
+          }
+        }
         hist(cpts,col=1,breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),xlab='Changepoint locations',ylab="Local Count",...)
         yaxplength=par("yaxp")[2]-par("yaxp")[1]
         segments(x0=original.cpts,y0=-yaxplength,y1=-0.02*yaxplength,col=col.cpts[[i]],lwd=cpt.lwd) # do -0.5 so in the middle of the bar
         abline(h=max, col='grey')
       }
-      else if(type=="Difference"){
+      if(any(type=="Difference")){
         plot(tresid,type='n',col=hist.col,main=paste('Location Stability: ',method,"method"),xlab='Changepoint locations',ylab="Difference from expected",...)
         abline(h=0,col=1)
         to.plot=which(tresid!=0) # locations which are not 0
@@ -153,19 +163,11 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
           segments(to.plot[seg],0,to.plot[seg],tresid[to.plot[seg]],col=hist.col[to.plot[seg]],lty=lty.seg)
         }
       }
-      else{
-        hist(cpts,col=hist.col,border=hist.col,yaxt='n',breaks=0:n,xlim=c(0,n),main=paste('Location Stability: ',method,"method"),ylab="Global Proportion",xlab='Changepoint locations',...)
-        axis(side=2,at=round(c(0,max/4,max/2,3*max/4,max),2),labels=c(0,0.25,0.5,0.75,1), ...)
-        abline(h=max, col='grey')
-      }
-      # start breaks at 0 as define the boundaries thus 1:n is n-1 breaks, not n
-
     }
     # change colours to something meaningful to return to the user
     col.cpts[[i]][which(col.cpts[[i]]==cpt.col[1])] = "stable"
     col.cpts[[i]][which(col.cpts[[i]]==cpt.col[2])] = "unstable"
     col.cpts[[i]][which(col.cpts[[i]]==cpt.col[3])] = "outlier"
-    
   }
   if(return){
     return(list(expected=expected,col.cpts=col.cpts))
