@@ -2,8 +2,10 @@
 ############ Well Log Examples #################
 ################################################
 
+library(changepoint.influence)
+
 #### Load the data in the R package changepoint.influence ####
-data("welldata")
+data(welldata)
 welllog = welldata[1001:2000] # Extract the mid section of the data as analyzed in other papers
 n = length(welllog)
 var = NULL; for (i in 30:1000){var[i]=var(welllog[(i-29):i])} # rescale the data to have unit variance
@@ -24,13 +26,14 @@ LocationStability(cpts(out.PELT), welllogs.inf, type = 'Difference', cpt.lwd = 4
 ParameterStability(welllogs.inf, original.mean = rep(param.est(out.PELT)$mean, times=diff(c(0,out.PELT@cpts))), las = 1, ylab = 'Nuclear-Magnetic Response')
 
 #### Influence Map ####
+
 welllogs.inf = influence(out.PELT, method = "delete")
 InfluenceMap(cpts(out.PELT), welllogs.inf, data = welllogs, include.data = T,
-             ggops = theme(axis.text = element_text(size=15), axis.title = element_text(size=20), plot.title = element_text(size=25)), ylab = 'Nuclear-Magnetic\n Response')
+             ylab = 'Nuclear-Magnetic\n Response')
 
 welllogs.inf = influence(out.PELT, method = "outlier")
 InfluenceMap(cpts(out.PELT), welllogs.inf, data = welllogs, include.data = T, 
-             ggops = theme(axis.text = element_text(size=15), axis.title = element_text(size=20), plot.title = element_text(size=25)), ylab='Nuclear-Magnetic\n Response')
+             ylab='Nuclear-Magnetic\n Response')
 
 
 
@@ -59,8 +62,6 @@ ParameterStability(x.inf, original.mean = rep(param.est(xcpt)$mean, times=diff(c
 
 #### Influence Map ####
 x.inf = influence(xcpt, method = "delete")
-InfluenceMap(cpts(xcpt), x.inf, data = x, include.data = T, 
-             ggops = theme(axis.text = element_text(size=15), axis.title = element_text(size=20), plot.title = element_text(size=25)))
+InfluenceMap(cpts(xcpt), x.inf, data = x, include.data = T)
 x.inf = influence(xcpt, method = "outlier")
-InfluenceMap(cpts(xcpt), x.inf, data=x, include.data = T,
-             ggops = theme(axis.text = element_text(size=15), axis.title = element_text(size=20), plot.title = element_text(size=25)))
+InfluenceMap(cpts(xcpt), x.inf, data=x, include.data = T)
