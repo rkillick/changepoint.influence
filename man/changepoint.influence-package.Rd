@@ -25,7 +25,7 @@ Users are encouraged to explore the documentation for the StabilityOverview() gr
 Maintainer: \packageMaintainer{changepoint.influence}
 }
 \references{
-Wilms I, Killick R, Matteson DS (2021) Graphical Influence Diagnostics for Changepoint Models, \emph{ArxiV} \bold{#here!}}
+Wilms I, Killick R, Matteson DS (2021) Graphical Influence Diagnostics for Changepoint Models, \emph{ArxiV: 2107.10572}}
 \keyword{package}
 \keyword{changepoint}
 \keyword{influence}
