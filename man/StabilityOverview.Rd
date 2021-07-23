@@ -49,7 +49,6 @@ StabilityOverview(data, original.cpts, influence,cpt.lwd=2,
 }
 \references{
 Wilms I, Killick R, Matteson DS (2021) Graphical Influence Diagnostics for Changepoint Models, \emph{ArxiV: 2107.10572}}
-}
 \author{
 Rebecca Killick
 }
