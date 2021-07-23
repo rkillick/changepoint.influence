@@ -46,13 +46,13 @@ cpt.lty=c("dashed","dotdash","dotted"),ylab='',ggops=NULL)
 \details{
 	This function creates the highest detail graphic to display the results of a changepoint influence analysis on the location of the changepoints.  The graphic is an nxn heatmap of the difference between the observed segmentations under the "delete" or "outlier" Influence analysis and the expected segmentation.  Note that the expected segmentations take into account the fact that a changepoint at a timepoint, say 100, will move (to 99) when a timepoint prior to it is deleted and that adding an outlier will introduce new changepoints.
 	
-	Datapoints on  the  vertical  axis  without  a  single  coloured  co-ordinate  on  the  horizontal  axis  can  bec onsidered as non-influential since they do not trigger any changepoint instability.  Rows with coloured pixels correspond to data points which are instability triggers.
+	Datapoints on  the  vertical  axis  without  a  single  coloured  co-ordinate  on  the  horizontal  axis  can  be considered as non-influential since they do not trigger any changepoint instability.  Rows with coloured pixels correspond to data points which are instability triggers.
 	
 How to interpret the Influence Map (please also read the paper in the references for fuller details):
 
 \itemize{
 \item{colouring:}{Colouring above the diagonal indicates that an al-teration of the corresponding data point (on the vertical axis) affects earlier data points,colouring below the diagonal indicates that subsequent data points are affected.}
-\item{horizonal span}{A stop in colouring indicates that change-points have moved, while a continuation of colouring to the last data point indicates that, in  total,  fewer  or  additional  changepoints  are  detected.}
+\item{horizonal span:}{A stop in colouring indicates that change-points have moved, while a continuation of colouring to the last data point indicates that, in  total,  fewer  or  additional  changepoints  are  detected.}
 \item{local vs global:}{Most colouring originates on the diagonal,thereby indicating that a data point's alteration mainly affects neighbouring data points that most often belong to the same segment.  By contrast, in some cases a coloured pixel may  originate  away  from  the  diagonal,  thereby  exercising  global  influence.}
 \item{height:}{All data points (on the vertical axis) that appear in the  coloured area are influential and assert influence over the corresponding data points on the horizontal axis.  The height can be seen as the extent to which instability arises in this influential region.}
 }
@@ -61,8 +61,7 @@ How to interpret the Influence Map (please also read the paper in the references
   The function returns a plot denoted the Influence Map. If \code{resid=NULL} then the residuals (observed class - expected class) are also returned.
 }
 \references{
-Wilms I, Killick R, Matteson DS (2021) Graphical Influence Diagnostics for Changepoint Models, \emph{ArxiV} \bold{#here!}
-}
+Wilms I, Killick R, Matteson DS (2021) Graphical Influence Diagnostics for Changepoint Models, \emph{ArxiV: 2107.10572}}
 \author{
 Rebecca Killick
 }
