@@ -15,7 +15,7 @@ loo.ind.cpt=function(del.point,data,...){
   # apply the changepoint approach to the reduced data
   del.ans=cpt.mean(data,...)
   
-  # retreieve the relevant output
+  # retrieve the relevant output
   # class vector
   
   # parameter values
