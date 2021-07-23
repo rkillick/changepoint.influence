@@ -60,8 +60,7 @@ LocationStability(original.cpts, influence, expected.class=NULL,
   The function returns plot(s) and a list containing the labels of the \code{original.cpts} as either "stable", "unstable", or "outlier".  If \code{type="Difference"} and \code{expected.class=NULL} then the expected class is also returned as the first element of the list.
 }
 \references{
-Wilms I, Killick R, Matteson DS (2021) Graphical Influence Diagnostics for Changepoint Models, \emph{ArxiV} \bold{#here!}
-}
+Wilms I, Killick R, Matteson DS (2021) Graphical Influence Diagnostics for Changepoint Models, \emph{ArxiV: 2107.10572}
 \author{
 Rebecca Killick
 }
