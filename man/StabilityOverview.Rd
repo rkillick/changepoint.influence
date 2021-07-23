@@ -48,7 +48,7 @@ StabilityOverview(data, original.cpts, influence,cpt.lwd=2,
   The function returns a plot and a list containing the labels of the \code{original.cpts} as either "stable", "unstable", or "outlier".
 }
 \references{
-Wilms I, Killick R, Matteson DS (2021) Graphical Influence Diagnostics for Changepoint Models, \emph{ArxiV} \bold{#here!}
+Wilms I, Killick R, Matteson DS (2021) Graphical Influence Diagnostics for Changepoint Models, \emph{ArxiV: 2107.10572}}
 }
 \author{
 Rebecca Killick
