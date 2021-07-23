@@ -1,9 +1,9 @@
 setMethod("influence","cpt",function(model,method=c("delete","outlier"),pos=TRUE,same=FALSE,sd=0.01){
   # function to calculate the influence of a given set of data using different methods
   
-  # object     cpt object output from the changepoint packages
+  # object        cpt object output from the changepoint packages
   # method        method to calculate the influence according to
-  # pos=TRUE      MOO: If true mofidication is above the data, if false then below
+  # pos=TRUE      MOO: If true modification is above the data, if false then below
   # same=FALSE    MOO: If TRUE the original value doesn't matter the out.point is a new value, if true then range added to the original point
   # sd=0.01       MOO: jitter to add to the modify point
   
