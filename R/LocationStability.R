@@ -102,6 +102,7 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
         stop("data argument must be supplied if include.data=TRUE.")
       }
       op <- par(no.readonly = TRUE) # read current parameters
+      on.exit(par(op)) # returns options as user had them set on exit
       par(mfrow=c(2,1))
       plot(data,type='l',ylab=ylab,xlab=xlab,main=paste('Location Stability: ',method,"method"),...) # plot the original time series
       abline(v=original.cpts,col=col.cpts[[i]],lty=lty.cpts[[i]],lwd=cpt.lwd) # cpt.lty
@@ -133,7 +134,6 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
           segments(to.plot[seg],0,to.plot[seg],tresid[to.plot[seg]],col=hist.col[to.plot[seg]],lty=lty.seg)
         }
       }
-      par(op) # reset previous parameters
     }
     else{ # same as above but title included on Histogram
       if(any(type=="Global")){

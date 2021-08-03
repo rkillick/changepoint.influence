@@ -12,7 +12,7 @@ influence(model,...)
 }
 \arguments{
   \item{model}{
-	Depending on the class of \code{model} depends on the method used (and if one exists).  For \code{cpt} objects this is the original output from a call to the \code{cpt.*()} suite of functions in the \code{changepoint} package.
+	Depending on the class of \code{model} depends on the method used (and if one exists).  For \code{cpt} objects this is the original output from a call to the \code{cpt.*()} suite of functions in the "changepoint" package.
 }
   \item{method}{
   Either \code{"delete"} or \code{"outlier"}.  These control what happens to the individual observations when the data is perturbed. See details for further information on the difference between the two.
@@ -26,7 +26,7 @@ influence(model,...)
 \describe{
 
 \item{\code{signature(model = "cpt",method=c("delete","outlier"),pos=TRUE,same=FALSE,sd=0.01)}}{
-For \code{model="cpt"} objects this is the original output from a call to the \code{cpt.*()} suite of functions in the \code{changepoint} package.
+For \code{model="cpt"} objects this is the original output from a call to the \code{cpt.*()} suite of functions in the "changepoint" package.
 }
 }}
 
