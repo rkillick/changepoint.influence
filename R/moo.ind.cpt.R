@@ -1,7 +1,8 @@
-moo.ind.cpt=function(out.point,data,range,pos=TRUE,same=FALSE,sd=0.01,...){
+moo.ind.cpt=function(out.point,k,data,range,pos=TRUE,same=FALSE,sd=0.01,...){
   # function to generate a single moo dataset and apply the PELT algorithm to the data
   
-  # out.point     The index of the point to modify
+  # out.point     The start index of the k points to modify
+  # k             number of points to modify simultaneously
   # data          The original data
   # range         Max-Min of data
   # pos.=TRUE      If true modification is above the data, if false then below
@@ -14,7 +15,8 @@ moo.ind.cpt=function(out.point,data,range,pos=TRUE,same=FALSE,sd=0.01,...){
   else if(any(out.point>n)){stop('out.point is larger than the length of the data')}
   
   # generate the data
-  data[out.point]=make.many.outlier(data[out.point],range.data=range,pos=pos,same=same,sd=sd)
+  out.ind=out.point:(out.point+k-1)
+  data[out.ind]=make.many.outlier(data[out.ind],range.data=range,pos=pos,same=same,sd=sd)
 
   # apply the PELT approach
   outlier.ans=cpt.mean(data,...)
