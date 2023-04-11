@@ -1,8 +1,9 @@
-setMethod("influence","cpt",function(model,method=c("delete","outlier"),pos=TRUE,same=FALSE,sd=0.01){
+setMethod("influence","cpt",function(model,method=c("delete","outlier"),k=1,pos=TRUE,same=FALSE,sd=0.01){
   # function to calculate the influence of a given set of data using different methods
   
   # object        cpt object output from the changepoint packages
   # method        method to calculate the influence according to
+  # k             number of points to modify simultaneously
   # pos=TRUE      MOO: If true modification is above the data, if false then below
   # same=FALSE    MOO: If TRUE the original value doesn't matter the out.point is a new value, if true then range added to the original point
   # sd=0.01       MOO: jitter to add to the modify point
@@ -20,24 +21,24 @@ setMethod("influence","cpt",function(model,method=c("delete","outlier"),pos=TRUE
 
   if(any(method=="delete")){
     # replicate the generation of data and application of changepoint method to the data
-    ansobject.del=sapply(X=1:n,FUN=loo.ind.cpt,data=data,pen.value=pen.value(model),test.stat=test.stat(model),penalty=pen.type(model),minseglen=minseglen(model),method=method(model))
+    ansobject.del=sapply(X=1:(n-k+1),FUN=loo.ind.cpt,k=k,data=data,pen.value=pen.value(model),test.stat=test.stat(model),penalty=pen.type(model),minseglen=minseglen(model),method=method(model))
 
     # collate the output
     ansclass.del=matrix(NA,ncol=n,nrow=n)
     ansparam.del=matrix(NA,nrow=n,ncol=n)
-    for(i in 1:n){
+    for(i in 1:(n-k+1)){
       # building segment vector
-      class=rep(1:(ncpts(ansobject.del[[i]])+1),times=diff(c(0,cpts(ansobject.del[[i]]),n-1)))
-      if(i==1){class=c(NA,class)}
-      else if(i==n){class=c(class,NA)}
-      else{class=c(class[1:(i-1)],NA,class[i:(n-1)])} # filling the i back in to align everything
+      class=rep(1:(ncpts(ansobject.del[[i]])+1),times=diff(c(0,cpts(ansobject.del[[i]]),n-k)))
+      if(i==1){class=c(rep(NA,k),class)}
+      else if(i==(n-k+1)){class=c(class,rep(NA,k))}
+      else{class=c(class[1:(i-1)],rep(NA,k),class[i:(n-k)])} # filling the deleted indices back in to align everything
       ansclass.del[i,]=class
       
       # building mean param vector
-      param=rep(param.est(ansobject.del[[i]])$mean,times=diff(c(0,cpts(ansobject.del[[i]]),n-1)))
-      if(i==1){param=c(NA,param)}
-      else if(i==n){param=c(param,NA)}
-      else{param=c(param[1:(i-1)],NA,param[i:(n-1)])} # filling the i back in to align everything
+      param=rep(param.est(ansobject.del[[i]])$mean,times=diff(c(0,cpts(ansobject.del[[i]]),n-k)))
+      if(i==1){param=c(rep(NA,k),param)}
+      else if(i==(n-k+1)){param=c(param,rep(NA,k))}
+      else{param=c(param[1:(i-1)],rep(NA,k),param[i:(n-k)])} # filling the deleted indices back in to align everything
       ansparam.del[i,]=param
     }
     ans$delete=list(class.del=ansclass.del,param.del=ansparam.del)
@@ -45,12 +46,12 @@ setMethod("influence","cpt",function(model,method=c("delete","outlier"),pos=TRUE
   }
   if(any(method=="outlier")){
     # replicate the generation of data and application of changepoint method to the data
-    ansobject.out=sapply(X=1:n,FUN=moo.ind.cpt,data=data,range=diff(range(data)),pos=pos,same=same,sd=sd,pen.value=pen.value(model),test.stat=test.stat(model),penalty=pen.type(model),minseglen=minseglen(model),method=method(model))
+    ansobject.out=sapply(X=1:(n-k+1),FUN=moo.ind.cpt,k=k,data=data,range=diff(range(data)),pos=pos,same=same,sd=sd,pen.value=pen.value(model),test.stat=test.stat(model),penalty=pen.type(model),minseglen=minseglen(model),method=method(model))
   
     # collate the output
     ansclass.out=matrix(NA,ncol=n,nrow=n)
     ansparam.out=matrix(NA,nrow=n,ncol=n)
-    for(i in 1:n){
+    for(i in 1:(n-k+1)){
       # building segment vector
       ansclass.out[i,]=rep(1:(ncpts(ansobject.out[[i]])+1),times=diff(c(0,cpts(ansobject.out[[i]]),n)))
       
