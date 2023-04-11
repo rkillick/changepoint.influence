@@ -15,9 +15,14 @@ welllogs = welllog/sqrt(median(var, na.rm = T))
 out.PELT = cpt.mean(welllogs, method = 'PELT')
 
 #### Stability Dashboards ####
-welllogs.inf = influence(out.PELT)
+welllogs.inf = influence(out.PELT) # with default k=1
+welllogs.inf.k = influence(out.PELT, k=2) # with default multiple (k larger than one) modified data points
 StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf, las = 1, 
                   legend.args = list(display = TRUE, x = "bottomright", y = NULL, cex = 1.5, bty = "n", horiz = FALSE, xpd = FALSE), ylab = 'Nuclear-Magnetic Response') 
+# Currently doesn't work yet
+StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf.k, k=2, las = 1,
+                  legend.args = list(display = TRUE, x = "bottomright", y = NULL, cex = 1.5, bty = "n", horiz = FALSE, xpd = FALSE), ylab = 'Nuclear-Magnetic Response')
+
 
 #### Location Stability plot ####
 LocationStability(cpts(out.PELT), welllogs.inf, type = 'Difference', cpt.lwd = 4, las = 1)
