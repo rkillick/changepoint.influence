@@ -1,3 +1,22 @@
+lmo.ind.cpt=function(del.point, k=1, data,...){
+  # function to generate a lmo dataset and apply the PELT algorithm to the data
+  
+  # del.point     The start index of the k points to delete
+  # k             Number of points to modify simultaneously
+  # data          The original data
+  # ...           arguments to be passed to the changepoint method
+  
+  # Indices to be changed
+  del.ind=del.point:(del.point+k-1)
+  
+  # Call loo function 
+  out = loo.ind.cpt(del.point=del.ind,data=data,...)
+  
+  # return the output
+  return(out)
+  
+}
+
 loo.ind.cpt=function(del.point,data,...){
   # function to generate a single loo dataset and apply the PELT algorithm to the data
   
