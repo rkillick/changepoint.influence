@@ -1,9 +1,9 @@
-setMethod("influence","cpt",function(model,method=c("delete","outlier"),k=1,pos=TRUE,same=FALSE,sd=0.01){
+setMethod("influence","cpt",function(model,method=c("delete","outlier"),k=1, pos=TRUE,same=FALSE,sd=0.01){
   # function to calculate the influence of a given set of data using different methods
   
   # object        cpt object output from the changepoint packages
   # method        method to calculate the influence according to
-  # k             number of points to modify simultaneously
+  # k             Number of points to modify simultaneously
   # pos=TRUE      MOO: If true modification is above the data, if false then below
   # same=FALSE    MOO: If TRUE the original value doesn't matter the out.point is a new value, if true then range added to the original point
   # sd=0.01       MOO: jitter to add to the modify point
@@ -21,7 +21,7 @@ setMethod("influence","cpt",function(model,method=c("delete","outlier"),k=1,pos=
 
   if(any(method=="delete")){
     # replicate the generation of data and application of changepoint method to the data
-    ansobject.del=sapply(X=1:(n-k+1),FUN=loo.ind.cpt,k=k,data=data,pen.value=pen.value(model),test.stat=test.stat(model),penalty=pen.type(model),minseglen=minseglen(model),method=method(model))
+    ansobject.del=sapply(X=1:(n-k+1),FUN=lmo.ind.cpt, k=k, data=data,pen.value=pen.value(model),test.stat=test.stat(model),penalty=pen.type(model),minseglen=minseglen(model),method=method(model))
 
     # collate the output
     ansclass.del=matrix(NA,ncol=n,nrow=n)
@@ -46,7 +46,7 @@ setMethod("influence","cpt",function(model,method=c("delete","outlier"),k=1,pos=
   }
   if(any(method=="outlier")){
     # replicate the generation of data and application of changepoint method to the data
-    ansobject.out=sapply(X=1:(n-k+1),FUN=moo.ind.cpt,k=k,data=data,range=diff(range(data)),pos=pos,same=same,sd=sd,pen.value=pen.value(model),test.stat=test.stat(model),penalty=pen.type(model),minseglen=minseglen(model),method=method(model))
+    ansobject.out=sapply(X=1:(n-k+1),FUN=mmo.ind.cpt,k=k,data=data,range=diff(range(data)),pos=pos,same=same,sd=sd,pen.value=pen.value(model),test.stat=test.stat(model),penalty=pen.type(model),minseglen=minseglen(model),method=method(model))
   
     # collate the output
     ansclass.out=matrix(NA,ncol=n,nrow=n)
