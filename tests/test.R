@@ -20,12 +20,25 @@ welllogs.inf.k = influence(out.PELT, k=2) # with default multiple (k larger than
 welllogs.inf.random = influence(out.PELT, random=TRUE, nrep=100) # random indices with default k=1
 welllogs.inf.random.k = influence(out.PELT, k=2, random=TRUE, nrep=100) # random with default multiple (k larger than one) modified data points
 
+# Original k=1
 StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf, las = 1, 
                   legend.args = list(display = TRUE, x = "bottomright", y = NULL, cex = 1.5, bty = "n", horiz = FALSE, xpd = FALSE), ylab = 'Nuclear-Magnetic Response') 
-# Currently doesn't work yet
+
+# Random k=1
+StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf.random, random = T, las = 1, 
+                  legend.args = list(display = TRUE, x = "bottomright", y = NULL, cex = 1.5, bty = "n", horiz = FALSE, xpd = FALSE), ylab = 'Nuclear-Magnetic Response') 
+
+
+# k=2  and original
 StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf.k, k=2, las = 1,
                   legend.args = list(display = TRUE, x = "bottomright", y = NULL, cex = 1.5, bty = "n", horiz = FALSE, xpd = FALSE), ylab = 'Nuclear-Magnetic Response')
 
+# k=2 and random
+StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf.random.k, random = T, nrep = 100, k=2, las = 1,
+                  legend.args = list(display = TRUE, x = "bottomright", y = NULL, cex = 1.5, bty = "n", horiz = FALSE, xpd = FALSE), ylab = 'Nuclear-Magnetic Response')
+# Error in influence[[i]]$class.del[-c((n - k + 2):n), ][index.na - (n -  : 
+#  only 0's may be mixed with negative subscripts
+# deletion case                                                                     
 
 #### Location Stability plot ####
 LocationStability(cpts(out.PELT), welllogs.inf, type = 'Difference', cpt.lwd = 4, las = 1)

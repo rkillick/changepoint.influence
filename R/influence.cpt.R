@@ -40,6 +40,7 @@ setMethod("influence","cpt",function(model,method=c("delete","outlier"), nrep,k=
     }else{
       ansobject.del=sapply(X=1:(n-k+1),FUN=lmo.ind.cpt, k=k, data=data,pen.value=pen.value(model),test.stat=test.stat(model),penalty=pen.type(model),minseglen=minseglen(model),method=method(model))
     }
+    # indices and set indices above, leave out if else part.
 
     # collate the output
     ansclass.del=matrix(NA,ncol=n,nrow=nrep)
