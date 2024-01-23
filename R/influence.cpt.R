@@ -10,7 +10,7 @@ setMethod("influence","cpt",function(model,method=c("delete","outlier"), nrep,k=
   # random=FALSE  logical: If true then randomly choose the indices to be modified, if false then all indices are consecutively modified
   # nrep          number of indices to be modified if random=TRUE
   
-  if(!inherits(model,"cpt")){stop("This function takes a cpt object as the model input")}
+  if(class(model)!="cpt"){stop("This function takes a cpt object as the model input")}
   if(cpttype(model)!="mean"){stop("Currently only models generated from the cpt.mean function are supported.")}
 
   
