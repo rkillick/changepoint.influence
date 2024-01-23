@@ -1,27 +1,3 @@
-mmo.ind.cpt=function(out.point, k, data,range,pos=TRUE,same=FALSE,sd=0.01,...){
-  # function to generate a single moo dataset and apply the PELT algorithm to the data
-  
-  # out.point     The start index of the point to modify
-  # k             Number of points to modify simultaneously
-  # data          The original data
-  # range         Max-Min of data
-  # pos.=TRUE      If true modification is above the data, if false then below
-  # same.=FALSE    If TRUE the original value doesn't matter the out.point is a new value, if true then range added to the original point
-  # sd.=0.01       jitter to add to the modified point
-  # ...           arguments to be passed to the changepoint method
-  
-  # Indices to be changed
-  out.ind=out.point:(out.point+k-1)
-  
-  # Call moo function 
-  out = moo.ind.cpt(out.point=out.ind, data=data, range=range, pos=pos, same=same, sd=sd, ...)
-  
-  # return the output
-  return(out)
-}
-
-
-
 moo.ind.cpt=function(out.point,data,range,pos=TRUE,same=FALSE,sd=0.01,...){
   # function to generate a single moo dataset and apply the PELT algorithm to the data
   

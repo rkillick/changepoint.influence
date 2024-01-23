@@ -1,4 +1,4 @@
-StabilityOverview=function(data, original.cpts, influence, random = FALSE, k=1, nrep, cpt.lwd=2,cpt.col=c("#009E73", "#E69F00", "#E41A1C"),cpt.lty=c("dashed","dotdash","dotted"),ylab=' ',xlab='Index', legend.args=list(display=TRUE,x="left",y=NULL,cex = 1,bty="n",horiz=TRUE,xpd=FALSE), ...){
+StabilityOverview=function(data, original.cpts, influence,cpt.lwd=2,cpt.col=c("#009E73", "#E69F00", "#E41A1C"),cpt.lty=c("dashed","dotdash","dotted"),ylab=' ',xlab='Index', legend.args=list(display=TRUE,x="left",y=NULL,cex = 1,bty="n",horiz=TRUE,xpd=FALSE), ...){
   # plots the original changepoints with colours indicating whether they have moved within the modify/delete methods
   
   col.cpts=list()
@@ -15,30 +15,9 @@ StabilityOverview=function(data, original.cpts, influence, random = FALSE, k=1, 
     if(names[i]=="delete"){
       method="Deletion"
       max=n-1
-      if(k==1){
-        index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
-        influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
-        influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
-      }else{
-        
-        if(!random){
-          # Code for original/ non-random
-          influence[[i]]$class.del[1,1:k]=1 # First replace the first k NAs in row 1 with 1
-          for(ik in 1:k){
-            index.na=which(is.na(influence[[i]]$class.del[-c((n-k+2):n), ]))   # delete last k-1 lines since these are NAs
-            influence[[i]]$class.del[-c((n-k+2):n),][index.na]=influence[[i]]$class.del[-c((n-k+2):n),][index.na-(n-(k-1))] # consecutively replace NA with previous index
-          }
-        }else{
-          influence[[i]]$class.del[,1]=1 # First replace NAs in the first column with ones
-          for(ik in 1:k){
-            index.na=which(is.na(influence[[i]]$class.del))   # delete last k-1 lines since these are NAs
-            influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-nrep] # consecutively replace NA with previous index
-          }
-        }
-
-        
-
-      }
+      index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
+      influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
+      influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
     }
 
     plot(data,type='l',ylab=ylab,xlab=xlab,main=paste("Stability Dashboard: ", method,"method"),...) # plot the original time series
@@ -49,16 +28,12 @@ StabilityOverview=function(data, original.cpts, influence, random = FALSE, k=1, 
     if(names[i]=="delete"){
       # create an index of cpts to delete as they are just a function of the deletion process
       del.correct.index=apply(matrix(original.cpts,ncol=1),1,FUN=function(x){return(which(cpts==(x+1))[1])})
-      # There are NAs in del.correct.index for k>1, so cant do following line
-      # cpts=cpts[-del.correct.index]
-      cpts=cpts[-del.correct.index[!is.na(del.correct.index)]]
+      cpts=cpts[-del.correct.index]
     }
     else{
       # create an index of cpts to delete as they are just a function of the modify process
       del.outlier.index=apply(matrix(1:(n-1),ncol=1),1,FUN=function(x){return(which(cpts==x)[1:2])})
-      # There are NAs in del.correct.index for k>1, so cant do following line
-      # cpts=cpts[-del.outlier.index]
-      cpts=cpts[-del.outlier.index[!is.na(del.outlier.index)]]
+      cpts=cpts[-del.outlier.index]
     }
     
     tcpts=table(cpts)
