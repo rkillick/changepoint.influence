@@ -50,7 +50,7 @@ cpt.lty=c("dashed","dotdash","dotted"),ylab='',ggops=NULL)
 	
 How to interpret the Influence Map (please also read the paper in the references for fuller details):
 
-\itemize{
+\describe{
 \item{colouring:}{Colouring above the diagonal indicates that an al-teration of the corresponding data point (on the vertical axis) affects earlier data points,colouring below the diagonal indicates that subsequent data points are affected.}
 \item{horizonal span:}{A stop in colouring indicates that change-points have moved, while a continuation of colouring to the last data point indicates that, in  total,  fewer  or  additional  changepoints  are  detected.}
 \item{local vs global:}{Most colouring originates on the diagonal,thereby indicating that a data point's alteration mainly affects neighbouring data points that most often belong to the same segment.  By contrast, in some cases a coloured pixel may  originate  away  from  the  diagonal,  thereby  exercising  global  influence.}
