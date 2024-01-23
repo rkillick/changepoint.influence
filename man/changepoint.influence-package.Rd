@@ -30,7 +30,8 @@ Wilms I, Killick R, Matteson DS (2022) Graphical Influence Diagnostics for Chang
 \keyword{changepoint}
 \keyword{influence}
 \seealso{
-\code{\link{StabilityOverview}}, \code{\link{LocationStability}}, \code{\link{ParameterStability}}, \code{\link{InfluenceMap}}
+\code{\link{influence-methods}},\code{\link{StabilityOverview}},
+\code{\link{LocationStability}}, \code{\link{ParameterStability}}, \code{\link{InfluenceMap}}
 }
 \examples{
 \donttest{

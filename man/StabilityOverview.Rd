@@ -55,7 +55,7 @@ Rebecca Killick
 
 
 \seealso{
-\code{\link{influence}}, \code{\link{LocationStability}},\code{\link{ParameterStability}},\code{\link{InfluenceMap}}
+\code{\link{influence-methods}}, \code{\link{LocationStability}},\code{\link{ParameterStability}},\code{\link{InfluenceMap}}
 }
 \examples{
 #### Generate Simulated data example ####
