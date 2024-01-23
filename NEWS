@@ -4,6 +4,7 @@ Version 1.0.1
 * Removed generic use of influence(model,...) from usage area in influence-methods.Rd - CRAN check
 * Updated format of NEWS to comply with new CRAN checks
 * Updated references throughout to JCGS citation instead of ArXiV
+* Updated influence link in help files to link to our influence documentation and not the lm.influence function in the stats package!
 
 Version 1.0
 ===========
