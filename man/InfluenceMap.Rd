@@ -61,7 +61,7 @@ How to interpret the Influence Map (please also read the paper in the references
   The function returns a plot denoted the Influence Map. If \code{resid=NULL} then the residuals (observed class - expected class) are also returned.
 }
 \references{
-Wilms I, Killick R, Matteson DS (2021) Graphical Influence Diagnostics for Changepoint Models, \emph{ArxiV: 2107.10572}}
+Wilms I, Killick R, Matteson DS (2022) Graphical Influence Diagnostics for Changepoint Models, \emph{Journal of Computational and Graphical Statistics},  \bold{31:3}, 753--765 \emph{DOI: 10.1080/10618600.2021.2000873}}
 \author{
 Rebecca Killick
 }
