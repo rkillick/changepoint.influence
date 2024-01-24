@@ -8,6 +8,7 @@ importFrom("grid","unit.pmax","textGrob")
 importFrom("gridExtra","grid.arrange")
 importFrom("data.table","rbindlist")
 importFrom("graphics","par","abline","segments","axis","legend","hist")
+importFrom("stats","end")
 
 export("InfluenceMap","ParameterStability","LocationStability",
        "StabilityOverview") # plots

@@ -7,8 +7,8 @@
  ~~ Methods for function \code{influence}  ~~
 }
 \usage{
-influence(model,...)
-\S4method{influence}{cpt}(model,method=c("delete","outlier"),pos=TRUE,same=FALSE,sd=0.01)
+\S4method{influence}{cpt}(model,method=c("delete","outlier"),k=1, modify="all",n.modify,
+pos=TRUE,same=FALSE,sd=0.01)
 }
 \arguments{
   \item{model}{
@@ -16,6 +16,15 @@ influence(model,...)
 }
   \item{method}{
   Either \code{"delete"} or \code{"outlier"}.  These control what happens to the individual observations when the data is perturbed. See details for further information on the difference between the two.
+  }
+  \item{k}{
+  Number of consecutive points to modify, defaults to 1.
+  }
+  \item{modify}{
+  Which starting points will be modified.  Choice of: \code{"all"} (default); \code{"random"} selection of \code{n.modify} uniformly; \code{"stratified"} selection of \code{n.modify} stratified by segment; or a user-specified vector of starting values between 1 and length of data -k+1.
+  }
+  \item{n.modify}{
+  Only used in \code{"random"} and \code{"stratified"}.  Number of data points to sample.
   }
   \item{pos}{For \code{method="outlier"} this is whether the outlier is positive (TRUE) or negative (FALSE).}
   \item{same}{For \code{method="outlier"} and multiple outliers, this is whether we want the outliers to have the same mean (TRUE) (takes the first outlier, adds 2*range(data), then jitters the others around this value) or whether we add 2*range(data) to the existing value of each datapoint (FALSE).}

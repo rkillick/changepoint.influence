@@ -17,8 +17,13 @@ out.PELT = cpt.mean(welllogs, method = 'PELT')
 #### Stability Dashboards ####
 welllogs.inf = influence(out.PELT) # with default k=1
 welllogs.inf.k = influence(out.PELT, k=2) # with default multiple (k larger than one) modified data points
-welllogs.inf.random = influence(out.PELT, random=TRUE, nrep=100) # random indices with default k=1
-welllogs.inf.random.k = influence(out.PELT, k=2, random=TRUE, nrep=100) # random with default multiple (k larger than one) modified data points
+set.seed(1);welllogs.inf.random = influence(out.PELT, modify="random", n.modify=100) # random indices with default k=1
+set.seed(10);welllogs.inf.random.k = influence(out.PELT, k=3, modify="random", n.modify=100) # random with default multiple (k larger than one) modified data points
+set.seed(100);welllogs.inf.stratified = influence(out.PELT, modify="stratified", n.modify=500) # stratified indices with default k=1
+set.seed(1000);welllogs.inf.stratified.k = influence(out.PELT, k=5, modify="stratified", n.modify=500) # stratified with default multiple (k larger than one) modified data points
+welllogs.inf.user = influence(out.PELT, modify=c(23,64,239,792)) # random indices with default k=1
+welllogs.inf.user.k = influence(out.PELT, k=10, modify=c(23,64,239,792)) # random with default multiple (k larger than one) modified data points
+
 
 # Original k=1
 StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf, las = 1, 

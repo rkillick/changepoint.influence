@@ -1,7 +1,19 @@
-Version 1.0: First CRAN release
+Version 2.0
+===========
+* Added the option of k points to be modified into loo and moo (and parent functions to pass down)
+* Added arguments to main functions to allow the user to pick which subset of points are starting points (in conjunction with k sequential) to modify.  This includes "all" which gives the previous behaviour, "random" (uniform), "stratified" (by segment), or a vector of indices.
 
-Version 0.1: Original
+Version 1.0.1
+=============
+* Changed itemize to describe in InfluenceMap.Rd - CRAN check
+* Removed generic use of influence(model,...) from usage area in influence-methods.Rd - CRAN check
+* Updated format of NEWS to comply with new CRAN checks
+* Updated references throughout to JCGS citation instead of ArXiV
 
-Rebecca Killick
-Lancaster University
-www.lancs.ac.uk/~killick
+Version 1.0
+===========
+* First CRAN release
+
+Version 0.1
+===========
+* Original
