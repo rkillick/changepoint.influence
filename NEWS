@@ -1,4 +1,4 @@
-Version 1.0.1
+Version 1.0.2
 =============
 * Changed itemize to describe in InfluenceMap.Rd - CRAN check
 * Removed generic use of influence(model,...) from usage area in influence-methods.Rd - CRAN check
