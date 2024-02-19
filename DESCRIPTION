@@ -9,7 +9,7 @@ Maintainer: Rebecca Killick <r.killick@lancs.ac.uk>
 BugReports: https://github.com/rkillick/changepoint.influence/issues
 URL: https://github.com/rkillick/changepoint.influence/
 Imports: data.table, ggplot2, gridExtra, reshape, graphics, methods
-Depends: R(>= 3.5), changepoint
+Depends: R(>= 3.6), changepoint
 Suggests: testthat, vdiffr
 Description: Allows users to input their data, segmentation and function used for the segmentation (and additional arguments) and the package calculates the influence of the data on the changepoint locations, see Wilms et al. (2022) <https://doi.org/10.1080/10618600.2021.2000873>.  Currently this can only be used with the changepoint package functions to identify changes, but we plan to extend this.  There are options for different types of graphics to assess the influence.
 License: GPL
