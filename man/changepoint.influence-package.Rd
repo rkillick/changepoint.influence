@@ -30,7 +30,7 @@ Wilms I, Killick R, Matteson DS (2022) Graphical Influence Diagnostics for Chang
 \keyword{changepoint}
 \keyword{influence}
 \seealso{
-\code{\link{influence-methods}},
+\code{\link{influence}},
 \code{\link{StabilityOverview}}, \code{\link{LocationStability}}, \code{\link{ParameterStability}}, \code{\link{InfluenceMap}}
 }
 \examples{
@@ -53,20 +53,19 @@ welllogs.inf = influence(out.PELT)
 # and uses these in the calculation of the influence for the modified data.
 
 #### Stability Dashboards ####
-StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf, las = 1,ylab='Nuclear-Magnetic Response',
+StabilityOverview(welllogs.inf, las = 1,ylab='Nuclear-Magnetic Response',
   legend.args=list(display=TRUE,x="bottomright",y=NULL,cex=1.5,bty="n",horiz=FALSE,xpd=FALSE))
 # We can specify where the legend will sit in the graphic via the legend.args
 # which are passed to the legend() function.  We can also include additional arguments
 # to pass to the plotting such as las=1 here.
 
 #### Location Stability plot ####
-exp.seg=LocationStability(cpts(out.PELT), welllogs.inf, type = 'Difference', cpt.lwd = 4, las = 1)
+exp.seg=LocationStability(welllogs.inf, type = 'Difference', cpt.lwd = 4, las = 1)
 # Note that if the expected segmentation is not provided, it will be calcuated and then
 # returned so that the user can avoid calculating this again in other plot calls.
 
 #### Parameter Stability plot ####
-ParameterStability(welllogs.inf, original.mean = rep(param.est(out.PELT)$mean, 
-  times=diff(c(0,out.PELT@cpts))), las = 1, ylab = 'Nuclear-Magnetic Response')
+ParameterStability(welllogs.inf, las = 1, ylab = 'Nuclear-Magnetic Response')
 # Note that the original.mean argument is provided for each timepoint so is a length n vector.
 }
 
@@ -74,15 +73,13 @@ ParameterStability(welllogs.inf, original.mean = rep(param.est(out.PELT)$mean,
 \dontrun{
 library(ggplot2)
 welllogs.inf = influence(out.PELT, method = "delete")
-InfluenceMap(cpts(out.PELT),welllogs.inf,data=welllogs,include.data=TRUE,
-    ylab='Nuclear-Magnetic\n Response',
+InfluenceMap(welllogs.inf,include.data=TRUE,ylab='Nuclear-Magnetic\n Response',
     ggops=theme(axis.text=element_text(size=15),axis.title=element_text(size=20),
       plot.title=element_text(size=25)))
 # The InfluenceMap uses ggplot2 functions, thus you can add theme options via the ggops argument.
 # Here we change the text sizes to ensure readable titles and labels for a report.
 
 welllogs.inf = influence(out.PELT, method = "outlier")
-InfluenceMap(cpts(out.PELT), welllogs.inf, data = welllogs, include.data = TRUE, 
-    ylab='Nuclear-Magnetic\n Response')
+InfluenceMap(welllogs.inf, include.data = TRUE, ylab='Nuclear-Magnetic\n Response')
 }
 }

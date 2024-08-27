@@ -14,7 +14,7 @@ welllogs = welllog/sqrt(median(var, na.rm = T))
 #### Apply PELT to the welllog data ####
 out.PELT = cpt.mean(welllogs, method = 'PELT')
 
-#### Stability Dashboards ####
+#### Calculate Influence ####
 welllogs.inf = influence(out.PELT) # with default k=1
 welllogs.inf.k = influence(out.PELT, k=2) # with default multiple (k larger than one) modified data points
 set.seed(1);welllogs.inf.random = influence(out.PELT, modify="random", n.modify=100) # random indices with default k=1
@@ -25,37 +25,71 @@ welllogs.inf.user = influence(out.PELT, modify=c(23,64,239,792)) # random indice
 welllogs.inf.user.k = influence(out.PELT, k=10, modify=c(23,64,239,792)) # random with default multiple (k larger than one) modified data points
 
 
+# Stability Overview
 # Original k=1
-StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf, las = 1, 
+StabilityOverview(welllogs.inf, las = 1, 
                   legend.args = list(display = TRUE, x = "bottomright", y = NULL, cex = 1.5, bty = "n", horiz = FALSE, xpd = FALSE), ylab = 'Nuclear-Magnetic Response') 
 
 # Random k=1
-StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf.random, random = T, las = 1, 
+StabilityOverview(welllogs.inf.random, las = 1, 
                   legend.args = list(display = TRUE, x = "bottomright", y = NULL, cex = 1.5, bty = "n", horiz = FALSE, xpd = FALSE), ylab = 'Nuclear-Magnetic Response') 
 
 
 # k=2  and original
-StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf.k, k=2, las = 1,
+StabilityOverview(welllogs.inf.k, las = 1,
                   legend.args = list(display = TRUE, x = "bottomright", y = NULL, cex = 1.5, bty = "n", horiz = FALSE, xpd = FALSE), ylab = 'Nuclear-Magnetic Response')
 
 # k=2 and random
-StabilityOverview(welllogs, cpts(out.PELT), welllogs.inf.random.k, random = T, nrep = 100, k=2, las = 1,
+StabilityOverview(welllogs.inf.random.k, las = 1,
                   legend.args = list(display = TRUE, x = "bottomright", y = NULL, cex = 1.5, bty = "n", horiz = FALSE, xpd = FALSE), ylab = 'Nuclear-Magnetic Response')
-# Error in influence[[i]]$class.del[-c((n - k + 2):n), ][index.na - (n -  : 
-#  only 0's may be mixed with negative subscripts
-# deletion case                                                                     
+
+
 
 #### Location Stability plot ####
-LocationStability(cpts(out.PELT), welllogs.inf, type = 'Difference', cpt.lwd = 4, las = 1)
+# original k=1
+LocationStability(welllogs.inf, type = 'Difference', cpt.lwd = 4, las = 1)
+
+# Random k=1
+LocationStability(welllogs.inf.random, type = 'Difference', cpt.lwd = 4, las = 1)
+
+# k=2  and original
+LocationStability(welllogs.inf.k, type = 'Difference', cpt.lwd = 4, las = 1)
+
+# k=2 and random
+LocationStability(welllogs.inf.random.k, type = 'Difference', cpt.lwd = 4, las = 1)
+
+
 
 #### Parameter Stability plot ####
-ParameterStability(welllogs.inf, original.mean = rep(param.est(out.PELT)$mean, times=diff(c(0,out.PELT@cpts))), las = 1, ylab = 'Nuclear-Magnetic Response')
+# original k=1
+ParameterStability(welllogs.inf, las = 1,ylab = 'Nuclear-Magnetic Response')
+
+# Random k=1
+ParameterStability(welllogs.inf.random, las = 1,ylab = 'Nuclear-Magnetic Response')
+
+# k=2  and original
+ParameterStability(welllogs.inf.k, las = 1,ylab = 'Nuclear-Magnetic Response')
+
+# k=2 and random
+ParameterStability(welllogs.inf.random.k, las = 1,ylab = 'Nuclear-Magnetic Response')
+
 
 #### Influence Map ####
 
+# original k=1
+InfluenceMap(welllogs.inf, include.data = T,ylab = 'Nuclear-Magnetic\n Response')
+
+# Random k=1
+InfluenceMap(welllogs.inf.random, ylab = 'Nuclear-Magnetic Response')
+
+# k=2  and original
+InfluenceMap(welllogs.inf.k, las = 1,ylab = 'Nuclear-Magnetic Response')
+
+# k=2 and random
+InfluenceMap(welllogs.inf.random.k, las = 1,ylab = 'Nuclear-Magnetic Response')
+
 welllogs.inf = influence(out.PELT, method = "delete")
-InfluenceMap(cpts(out.PELT), welllogs.inf, data = welllogs, include.data = T,
-             ylab = 'Nuclear-Magnetic\n Response')
+InfluenceMap(welllogs.inf, include.data = T,ylab = 'Nuclear-Magnetic\n Response')
 
 welllogs.inf = influence(out.PELT, method = "outlier")
 InfluenceMap(cpts(out.PELT), welllogs.inf, data = welllogs, include.data = T, 

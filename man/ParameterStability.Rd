@@ -7,15 +7,11 @@ Parameter Stability Graphic
 Plots the middle detail level of the changepoint parameter stability according to the influence measure.
 }
 \usage{
-ParameterStability(influence,original.mean=NULL,digits=6,ylab='',xlab='Index',
-  cpt.col='red',cpt.width=3,...)
+ParameterStability(infcpt,digits=6,ylab='',xlab='Index',cpt.col='red',cpt.width=3,...)
 }
 \arguments{
-  \item{influence}{
-	The influence as calculated the \code{influence()} function provided within this package.  This is a list object.
-}
-  \item{original.mean}{
-	A vector, \emph{length n}, of the mean under the original segmentation at each timepoint.
+  \item{infcpt}{
+	An object of class \code{infcpt}. This is the result of a call to the \code{influence()} function provided within this package.
 }
   \item{digits}{
   The number of significant figures to round the mean values to before plotting.  (Purely to reduce the number of points plotted to make the graphics smaller for storage and loading)
@@ -47,7 +43,7 @@ Rebecca Killick
 
 
 \seealso{
-\code{\link{influence-methods}}, \code{\link{StabilityOverview}},\code{\link{LocationStability}},\code{\link{InfluenceMap}}
+\code{\link{influence}}, \code{\link{StabilityOverview}},\code{\link{LocationStability}},\code{\link{InfluenceMap}}
 }
 \examples{
 #### Generate Simulated data example ####
@@ -60,8 +56,7 @@ x.inf = influence(xcpt)
 
 
 #### Parameter Stability plot ####
-ParameterStability(x.inf, original.mean = rep(param.est(xcpt)$mean, 
-  times=diff(c(0,xcpt@cpts))), las = 1)
+ParameterStability(x.inf, las = 1)
 # note that the original mean is an n length vector and you can use the above code 
 # to get this from the original changepoint locations.
 }

@@ -1,7 +1,17 @@
 Version 2.0
 ===========
+* Changed output of influence list, each level (delete or outlier) previously has a sublist called class.out/class.del and param.out/param.del.  This has now been changed to segment and param.
 * Added the option of k points to be modified into loo and moo (and parent functions to pass down)
 * Added arguments to main functions to allow the user to pick which subset of points are starting points (in conjunction with k sequential) to modify.  This includes "all" which gives the previous behaviour, "random" (uniform), "stratified" (by segment), or a vector of indices.
+* Streamlined the backend functions (loo, moo)
+* Expanded use of the influence function to allows users to specify any changepoint method (with expectations on input and output formats)
+
+
+* Moved the influence method to a function with S4 object output influenceCpt
+* Changed the plotting functions to be methods for influenceCpt
+* Made new plot, summary and print functions for influenceCpt class
+* Added option of "difference" to inflence map so it can be plotted without the expected.
+* Allowed the use of changepoint methods that don't return parameter estimates
 
 Version 1.0.1
 =============

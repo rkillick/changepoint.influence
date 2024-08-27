@@ -9,7 +9,8 @@ importFrom("gridExtra","grid.arrange")
 importFrom("data.table","rbindlist")
 importFrom("graphics","par","abline","segments","axis","legend","hist")
 importFrom("stats","end")
+importFrom("utils", "hasName")
 
 export("InfluenceMap","ParameterStability","LocationStability",
        "StabilityOverview") # plots
-exportMethods("influence")
+export("influence")

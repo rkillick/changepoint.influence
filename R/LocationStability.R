@@ -1,4 +1,6 @@
-LocationStability=function(original.cpts, influence, expected.class=NULL,type=c("Difference","Global","Local"),data=NULL,include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#E41A1C"),cpt.lty=c("dashed","dotdash","dotted"),ylab='',xlab='Index',...){
+LocationStability=function(infcpt, type=c("Difference","Global","Local"),
+          include.data=FALSE,cpt.lwd=4,cpt.col=c("#009E73", "#E69F00", "#E41A1C"),
+          cpt.lty=c("dashed","dotdash","dotted"),ylab='',xlab='Index',...){
   # histograms the changepoint locations identified
   
   if(!any(type==c("Difference","Global","Local"))){
@@ -8,61 +10,70 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
   col.cpts=list()
   lty.cpts = list()
   
-  n=nrow(influence[[1]]$class)
-  ncpts=length(original.cpts)
+  n=length(infcpt$org.data)
+  ncpts=length(infcpt$org.cpts)-2 # remove 0 and n
 
-  original.class=rep(1:(ncpts+1),times=diff(c(0,original.cpts,n)))
-  names=names(influence)
-
-  return=0
-  # if the expected isn't given it needs calculating
-  if((any(type=="Difference"))&(is.null(expected.class))){
-    return=1
-    expected=list()
-    
-    for(i in 1:length(influence)){
-      if(eval(parse(text=paste("is.null(expected$",names[i],")",sep="")))){
-        eval(parse(text=paste("expected$",names[i],"=",names[i],".expected.mean(original.class)",sep=""))) # calculated the expected
-      }
-    }
-  }
+  original.segment=rep(1:(ncpts+1),times=infcpt$org.seglen)
+  names=NULL
+  if(dim(infcpt$delete$segment)[2]!=1){names=c(names,"delete")}
+  if(dim(infcpt$outlier$segment)[2]!=1){names=c(names,"outlier")}
   
-  for(i in 1:length(influence)){
+  for(i in 1:length(names)){
     method="Outlier"
-    max=n-2
+    influence=infcpt$outlier#influence=slot(infcpt,names[i]) # take a copy as we are going to modify it
+    max=nrow(influence$segment)-infcpt$k-1 # n-2
+
     if(names[i]=="delete"){
       method="Deletion"
-      max=n-1
+      influence=infcpt$delete
+      max=nrow(influence$segment)-infcpt$k # n-1
       
       # Dealing with the NAs temporarily (not returned to user) so we can plot nicely
-      index.na=which(is.na(influence[[i]]$class.del))[-1] # -1 as we will deal with the first instance separately
-      influence[[i]]$class.del[index.na]=influence[[i]]$class.del[index.na-n] # replace NA with previous index
-      influence[[i]]$class.del[1,1]=1 # replace the first NA with 1
+      influence$segment[,1]=1 # First replace any NAs in the first column with ones
+      for(ik in 1:infcpt$k){
+        index.na=which(is.na(influence$segment))   # delete last k-1 lines since these are NAs
+        influence$segment[index.na]=influence$segment[index.na-nrow(influence$segment)] # consecutively replace NA with previous index
+      }
+      
+      if((any(type=="Difference"))&(is.null(infcpt$delete$expected))){
+        # if the expected isn't given it needs calculating
+        infcpt$delete$expected=delete.expected.mean(original.segment) # calculated the expected
 
-      if((any(type=="Difference"))&(is.null(expected.class))){
-        # repeat for expected
-        index.na=which(is.na(expected$delete))[-1] # -1 as we will deal with the first instance separately
-        expected$delete[index.na]=expected$delete[index.na-n] # replace NA with previous index
-        expected$delete[1,1]=1 # replace the first NA with 1
+        # repeat correction for expected
+        infcpt$delete$expected[,1]=1 # First replace any NAs in the first column with ones
+        for(ik in 1:infcpt$k){
+          index.na=which(is.na(infcpt$delete$expected))   # delete last k-1 lines since these are NAs
+          infcpt$delete$expected[index.na]=infcpt$delete$expected[index.na-nrow(infcpt$delete$expected)] # consecutively replace NA with previous index
+        }
       }
     }
-    
-    cpts=unlist(apply(influence[[i]]$class,1,FUN=function(x){which(diff(x)==1)}))
+    else{
+      # if the expected isn't given it needs calculating
+      if((any(type=="Difference"))&(is.null(infcpt$outlier$expected))){
+        infcpt$outlier$expected=outlier.expected.mean(original.segment) # calculated the expected
+      }
+    }
+    cpts=unlist(apply(influence$segment,1,FUN=function(x){which(diff(x)==1)}))
     cpts=sort(cpts)
     
     if(names[i]=="delete"){
       # create an index of cpts to delete as they are just a function of the deletion process
-      del.correct.index=apply(matrix(original.cpts,ncol=1),1,FUN=function(x){return(which(cpts==(x+1))[1])})
-      cpts=cpts[-del.correct.index]
+      del.correct.index=apply(matrix(infcpt$org.cpts,ncol=1),1,FUN=function(x){return(which(cpts==(x+1))[1])})
+      # There are NAs in del.correct.index for k>1, so cant do following line
+      # cpts=cpts[-del.correct.index]
+      cpts=cpts[-del.correct.index[!is.na(del.correct.index)]]
     }
     else{
       # create an index of cpts to delete as they are just a function of the modify process
       del.outlier.index=apply(matrix(1:(n-1),ncol=1),1,FUN=function(x){return(which(cpts==x)[1:2])})
-      cpts=cpts[-del.outlier.index]
+      # There are NAs in del.correct.index for k>1, so cant do following line
+      # cpts=cpts[-del.outlier.index]
+      cpts=cpts[-del.outlier.index[!is.na(del.outlier.index)]]
     }
     
     tcpts=table(cpts)
-
+    original.cpts=infcpt$org.cpts[-c(1,length(infcpt$org.cpts))] # take off 0 and n
+    
     col.cpts[[i]]=rep(cpt.col[1],length(original.cpts)) # "dark green"
     lty.cpts[[i]]=rep(cpt.lty[1],length(original.cpts)) # "dashed" for "green"
     for(j in 1:ncpts){
@@ -79,14 +90,15 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
     names(col.cpts)[i]=names[i]
     
     if(any(type=="Difference")){
-      # need to calculated the changepoints from the classes for both observed and expected
-      cpts.observed=unlist(apply(influence[[i]]$class,MARGIN=1,FUN=function(x){
+      # need to calculated the changepoints from the segmentss for both observed and expected
+      cpts.observed=unlist(apply(influence$segment,MARGIN=1,FUN=function(x){
         return(which(diff(x)!=0))}))
-      ########### note the partial matching used here (class.del or class.out)
       cpts.observed=factor(cpts.observed,levels=1:n)
       tcpts.observed=table(cpts.observed)
-      cpts.expected=unlist(apply(expected[[i]],MARGIN=1,FUN=function(x){
-        return(which(diff(x)!=0))}))
+      cpts.expected=ifelse(names[i]=="delete",unlist(apply(infcpt$delete$expected,MARGIN=1,FUN=
+          function(x){return(which(diff(x)!=0))})),
+          unlist(apply(infcpt$outlier$expected,MARGIN=1,FUN=function(x){return(which(diff(x)!=0))})))
+      
       cpts.expected=factor(cpts.expected,levels=1:n)
       tcpts.expected=table(cpts.expected)
       
@@ -98,13 +110,13 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
     hist.col[original.cpts]=col.cpts[[i]]
 
     if(include.data==TRUE){
-      if(is.null(data)){
-        stop("data argument must be supplied if include.data=TRUE.")
+      if(is.null(infcpt$org.data)){
+        stop("infcpt$org.data argument must be supplied if include.data=TRUE.")
       }
       op <- par(no.readonly = TRUE) # read current parameters
       on.exit(par(op)) # returns options as user had them set on exit
       par(mfrow=c(2,1))
-      plot(data,type='l',ylab=ylab,xlab=xlab,main=paste('Location Stability: ',method,"method"),...) # plot the original time series
+      plot(infcpt$org.data,type='l',ylab=ylab,xlab=xlab,main=paste('Location Stability: ',method,"method"),...) # plot the original time series
       abline(v=original.cpts,col=col.cpts[[i]],lty=lty.cpts[[i]],lwd=cpt.lwd) # cpt.lty
       
       if(any(type=="Global")){
@@ -168,9 +180,13 @@ LocationStability=function(original.cpts, influence, expected.class=NULL,type=c(
     col.cpts[[i]][which(col.cpts[[i]]==cpt.col[1])] = "stable"
     col.cpts[[i]][which(col.cpts[[i]]==cpt.col[2])] = "unstable"
     col.cpts[[i]][which(col.cpts[[i]]==cpt.col[3])] = "outlier"
+    if(names[i]=="delete"){
+      infcpt$col.cpts$delete=col.cpts[[i]]
+    }
+    else{
+      infcpt$col.cpts$outlier=col.cpts[[i]]
+    }
   }
-  if(return){
-    return(list(expected=expected,col.cpts=col.cpts))
-  }
-  return(col.cpts)
+  
+  return(infcpt) # the modified object is returned.
 }

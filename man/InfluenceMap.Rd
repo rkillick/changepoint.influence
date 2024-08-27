@@ -7,22 +7,13 @@ Influence Map Graphic
 Plots the highest detail level of the changepoint location stability according to the influence measure.
 }
 \usage{
-InfluenceMap(original.cpts, influence, resid=NULL,data=NULL,include.data=FALSE,
-influence.col=c("#0C4479","white","#AB9783"),cpt.col=c("#009E73", "#E69F00", "#E41A1C"),
-cpt.lty=c("dashed","dotdash","dotted"),ylab='',ggops=NULL)
+InfluenceMap(infcpt,include.data=FALSE,influence.col=c("#0C4479","white","#AB9783"),
+cpt.col=c("#009E73", "#E69F00", "#E41A1C"),cpt.lty=c("dashed","dotdash","dotted"),
+ylab='',ggops=NULL)
 }
 \arguments{
-  \item{original.cpts}{
-	An ordered vector of the changepoint locations found by your favourite changepoint method.
-}
-  \item{influence}{
-	The influence as calculated the \code{influence()} function provided within this package.  This is a list object.
-}
-  \item{resid}{
-  An nxn matrix containing the difference of the observed class (\code{influence}) from the expected class at each datapoint.  If this is left as \code{NULL}, it will be calculated and returned to the user.
-  }
-  \item{data}{
-	A vector containing the data on which you have run your changepoint method.
+  \item{infcpt}{
+	An object of class \code{infcpt}. This is the result of a call to the \code{influence()} function provided within this package.
 }
   \item{include.data}{
   Is a plot of the data to be included above the histogram.  Default is \code{FALSE}.
@@ -68,7 +59,7 @@ Rebecca Killick
 
 
 \seealso{
-\code{\link{influence-methods}}, \code{\link{StabilityOverview}}, \code{\link{ParameterStability}}, \code{\link{LocationStability}}
+\code{\link{influence}}, \code{\link{StabilityOverview}}, \code{\link{ParameterStability}}, \code{\link{LocationStability}}
 }
 \examples{
 #### Generate Simulated data example ####

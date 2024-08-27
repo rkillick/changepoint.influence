@@ -7,20 +7,14 @@ Stability Overview Graphic
 Plots the overview of the stability according to the influence measure.
 }
 \usage{
-StabilityOverview(data, original.cpts, influence,cpt.lwd=2,
+StabilityOverview(infcpt,cpt.lwd=2,
   cpt.col=c("#009E73", "#E69F00", "#E41A1C"),cpt.lty=c("dashed","dotdash","dotted"),
-  ylab=' ',xlab='Index', legend.args=list(display=TRUE,x="left",y=NULL,cex = 1,bty="n",
+  ylab=' ',xlab='Index', legend.args=list(display=TRUE,x="top",y=NULL,cex = 1,bty="n",
   horiz=TRUE,xpd=FALSE), ...)
 }
 \arguments{
-  \item{data}{
-	A vector containing the data on which you have run your changepoint method.
-}
-  \item{original.cpts}{
-	An ordered vector of the changepoint locations found by your favourite changepoint method.
-}
-  \item{influence}{
-	The influence as calculated the \code{influence()} function provided within this package.  This is a list object.
+  \item{infcpt}{
+	An object of class \code{infcpt}. This is the result of a call to the \code{influence()} function provided within this package.
 }
   \item{cpt.lwd}{
 	The line width to be used when plotting the \code{original.cpts} on the \code{data}. Standard \code{lwd} values allowed. A single value is expected.
@@ -55,7 +49,7 @@ Rebecca Killick
 
 
 \seealso{
-\code{\link{influence-methods}}, \code{\link{LocationStability}},\code{\link{ParameterStability}},\code{\link{InfluenceMap}}
+\code{\link{influence}}, \code{\link{LocationStability}},\code{\link{ParameterStability}},\code{\link{InfluenceMap}}
 }
 \examples{
 #### Generate Simulated data example ####
@@ -68,7 +62,7 @@ x.inf = influence(xcpt)
 
 
 #### Stability Dashboard ####
-StabilityOverview(x,cpts(xcpt),x.inf,las=1,
+StabilityOverview(x.inf,las=1,
   legend.args=list(display=TRUE,x="topright",y=NULL,cex=1.5,bty="n",horiz=FALSE,xpd=FALSE))
 
 
